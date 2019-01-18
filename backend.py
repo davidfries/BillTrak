@@ -75,7 +75,7 @@ class BTBackend():
         query = "DELETE FROM bills WHERE billid=:billid"
         self.db.query(query, billid=billid)
 
-    def createbill(self, companyid, billid, amt, datepaid, dateinvoiced, recurring, paymenturl=None, phonenum=None, category=None, confirmationnum=None):
+    def createbill(self,  billid, amt, datepaid, dateinvoiced, recurring, paymenturl=None, phonenum=None,companyid=genintid(), category=None, confirmationnum=None):
         query = "INSERT INTO bills VALUES(:billid,:companyid,:amt,:dateinvoiced,:datepaid,:confirmationnum,:paymenturl,:category,:phonenum,:recurring)"
 
         self.db.query(query, companyid=companyid, billid=billid, amt=amt, datepaid=datepaid, dateinvoiced=dateinvoiced,
