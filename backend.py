@@ -2,58 +2,96 @@ import psycopg2
 import random
 import string
 import records
+
+#depreciated
 class COPG():
     def conn(self):
-        conn=psycopg2.connect("host=192.168.5.172 dbname=billtrak user=dj password=Skyliner34")
+        conn = psycopg2.connect(
+            "host=192.168.5.172 dbname=billtrak user=dj password=Skyliner34")
         return conn
+
+
 class BTBackend():
     try:
-        db=records.Database("postgresql://192.168.5.172/billtrak?user=dj&password=Skyliner34")
+        db = records.Database(
+            "postgresql://192.168.5.172/billtrak?user=dj&password=Skyliner34")
     except:
         print("error in db connection")
 
     def genintid(self):
-        pass
+        return random.getrandbits(30)
+        
+
     def gencharid(self):
         userid = ''.join(random.choices(
             string.ascii_letters + string.digits, k=8))
         return userid
-        
-    def debugprint(self):
-        rows=self.db.query("select * from bills")
-        print(rows.first().paymenturl)
-        pass
-    
-    
-    
-    def getbillsbycompany(self,companyid):
-        query="select * from bills where companyid=:companyid"
-        
-        rows=self.db.query(query,companyid=companyid)
+
+    # def debugprint(self):
+    #     rows=self.db.query("select * from bills")
+    #     print(rows.all().paymenturl)
+    #     pass
+
+    def createcompany(self, companyname, datecreated, userid, category=None, companyid=genintid()):
+        query = "INSERT INTO company(companyid,companyname,datecreated,,userid,category) VALUES(:companyid,:companyname,:datecreated,:userid,:category)"
+        self.db.query(query, companyid=companyid, companyname=companyname,
+                      datecreated=datecreated, category=category, userid=userid)
+
+    def getbillsbycompany(self, companyid):
+        query = "select * from bills where companyid=:companyid"
+
+        rows = self.db.query(query, companyid=companyid)
         return rows.all()
-        
-    def getamtbybillid(self,billid):
-        query="select * from bills where billid=:billid"
-        
-        rows=self.db.query(query,billid=billid).first()
+
+    def getamtbybillid(self, billid):
+        query = "select * from bills where billid=:billid"
+
+        rows = self.db.query(query, billid=billid).first()
         return rows.amt
-    def getbillinfo(self):
+
+    def getcompanyidsbyuserid(self, userid):
+        query = "select companyid from company where userid = :userid"
+        return self.db.query(query, userid=userid).all
+
+    def getcompanynames(self,userid):
+        query = "select companyname from company where userid = :userid"
+        return self.db.query(query, userid=userid).all
+
+    def getbillrecurringstatus(self, billid):
+        query = "select recurring from bills where billid=:billid"
+
+        return self.db.query(query, billid=billid).first()
+
+    def validateuser(self, userid):
         pass
-    def validateuser(self,userid):
+
+    def validatepw(self, pw):
         pass
-    def validatepw(self,pw):
+
+    def updatebillrecurring(self, billid):
         pass
-    def updatebillrecurring(self,billid):
+
+    def deletebill(self, billid):
+        query = "DELETE FROM bills WHERE billid=:billid"
+        self.db.query(query, billid=billid)
+
+    def createbill(self, companyid, billid, amt, datepaid, dateinvoiced, recurring, paymenturl=None, phonenum=None, category=None, confirmationnum=None):
+        query = "INSERT INTO bills VALUES(:billid,:companyid,:amt,:dateinvoiced,:datepaid,:confirmationnum,:paymenturl,:category,:phonenum,:recurring)"
+
+        self.db.query(query, companyid=companyid, billid=billid, amt=amt, datepaid=datepaid, dateinvoiced=dateinvoiced,
+                      confirmationnum=confirmationnum, paymenturl=paymenturl, phonenum=phonenum, category=category, recurring=recurring)
+
+        
+
+    def createnotification(self, notificationid, userid, useremail, billid, amt, phonenum, paymenturl):
         pass
-    def deletebill(self,billid):
+
+    def deletenotification(self, notificationid):
         pass
-    def createbill(self,companyid,amt,datepaid,dateinvoiced,paymenturl=None,phonenum=None):
-        pass
-    def createnotification(self,notificationid,userid,useremail,billid,amt,phonenum,paymenturl):
-        pass
-    def deletenotification(self,notificationid):
-        pass
-    
-BTBackend().debugprint()
-print(BTBackend().getbillsbycompany('1') )   
-print(BTBackend().getamtbybillid('test0001'))
+
+
+# BTBackend().debugprint()
+print(BTBackend().getbillsbycompany('1'))
+print(BTBackend().getamtbybillid('test0002'))
+# print(BTBackend().getamtbybillid('test0001'))
+# BTBackend().createbill('1','test0002','7762','1/17/2019','1/12/2019')
