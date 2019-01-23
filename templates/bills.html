@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container text-center">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Company</th>
+                <th>Due Date</th>
+                <th>Amount</th>
+                
+            </tr>
+        </thead>
+        {% for bill in billdata %}
+        <tbody>
+            <tr>
+                
+                <td> {{ bill.companyname }} </td>
+                <td>{{ bill.duedate }}</td>
+                <td> {{ bill.amt }} </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+{% endblock %}

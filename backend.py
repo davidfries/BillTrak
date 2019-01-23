@@ -32,11 +32,15 @@ class BTBackend():
     #     print(rows.all().paymenturl)
     #     pass
 
-    def createcompany(self, companyname, datecreated, userid, category=None, companyid=genintid()):
+    def createcompany(self, companyname, datecreated, userid, companyid, category=None):
+        companyid=self.genintid()
         query = "INSERT INTO company(companyid,companyname,datecreated,,userid,category) VALUES(:companyid,:companyname,:datecreated,:userid,:category)"
         self.db.query(query, companyid=companyid, companyname=companyname,
                       datecreated=datecreated, category=category, userid=userid)
-
+    def getbilldata(self,userid):
+        query="select * from billdatabyuserid WHERE userid=:userid"
+        rows = self.db.query(query,userid=userid)
+        return rows.all()
     def getbillsbycompany(self, companyid):
         query = "select * from bills where companyid=:companyid"
 
@@ -75,9 +79,9 @@ class BTBackend():
         query = "DELETE FROM bills WHERE billid=:billid"
         self.db.query(query, billid=billid)
 
-    def createbill(self,  billid, amt, datepaid, dateinvoiced, recurring, paymenturl=None, phonenum=None,companyid=genintid(), category=None, confirmationnum=None):
+    def createbill(self,  billid, amt, datepaid, dateinvoiced, recurring,companyid, paymenturl=None, phonenum=None, category=None, confirmationnum=None):
         query = "INSERT INTO bills VALUES(:billid,:companyid,:amt,:dateinvoiced,:datepaid,:confirmationnum,:paymenturl,:category,:phonenum,:recurring)"
-
+        companyid=self.genintid()
         self.db.query(query, companyid=companyid, billid=billid, amt=amt, datepaid=datepaid, dateinvoiced=dateinvoiced,
                       confirmationnum=confirmationnum, paymenturl=paymenturl, phonenum=phonenum, category=category, recurring=recurring)
 
@@ -89,9 +93,12 @@ class BTBackend():
     def deletenotification(self, notificationid):
         pass
 
+# data = BTBackend().getbilldata('dj')
+# for bill in data:
+#     print (bill.amt)
 
 # BTBackend().debugprint()
-print(BTBackend().getbillsbycompany('1'))
-print(BTBackend().getamtbybillid('test0002'))
+# print(BTBackend().getbillsbycompany('1'))
+# print(BTBackend().getamtbybillid('test0002'))
 # print(BTBackend().getamtbybillid('test0001'))
 # BTBackend().createbill('1','test0002','7762','1/17/2019','1/12/2019')
