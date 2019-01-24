@@ -11,7 +11,12 @@ def default():
 @app.route('/bills/<username>',methods=['GET','POST'])
 def billapp(username):
     if request.method=='POST':
-        pass
+        try:
+            BTBackend().createbill(BTBackend().gencharid(),request.form['billamt'],userid=username,companyname=request.form['companyname'],duedate=request.form['duedate'],paymenturl=request.form['billurl'],phonenum=request.form['billtel'],recurring=request.form['recurring'])
+            url="/bills/"+username
+            return redirect(url)
+        except Exception as err:
+            print(err)
     else:
         billdata=BTBackend().getbilldata(str(username))
         print(billdata)

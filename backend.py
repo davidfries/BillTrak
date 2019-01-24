@@ -33,8 +33,8 @@ class BTBackend():
     #     pass
 
     def createcompany(self, companyname, datecreated, userid, companyid, category=None):
-        companyid=self.genintid()
-        query = "INSERT INTO company(companyid,companyname,datecreated,,userid,category) VALUES(:companyid,:companyname,:datecreated,:userid,:category)"
+        
+        query = "INSERT INTO company(companyid,companyname,datecreated,userid,category) VALUES(:companyid,:companyname,:datecreated,:userid,:category)"
         self.db.query(query, companyid=companyid, companyname=companyname,
                       datecreated=datecreated, category=category, userid=userid)
     def getbilldata(self,userid):
@@ -79,11 +79,12 @@ class BTBackend():
         query = "DELETE FROM bills WHERE billid=:billid"
         self.db.query(query, billid=billid)
 
-    def createbill(self,  billid, amt, datepaid, dateinvoiced, recurring,companyid, paymenturl=None, phonenum=None, category=None, confirmationnum=None):
-        query = "INSERT INTO bills VALUES(:billid,:companyid,:amt,:dateinvoiced,:datepaid,:confirmationnum,:paymenturl,:category,:phonenum,:recurring)"
+    def createbill(self,  billid, amt,  duedate, recurring,userid,companyname,companyid=None,datepaid=None, paymenturl=None, phonenum=None, category=None, confirmationnum=None):
+        query = "INSERT INTO bills(billid,companyid,amt,datepaid,confirmationnum,paymenturl,category,phonenum,recurring,duedate) VALUES(:billid,:companyid,:amt,:datepaid,:confirmationnum,:paymenturl,:category,:phonenum,:recurring,:duedate)"
         companyid=self.genintid()
-        self.db.query(query, companyid=companyid, billid=billid, amt=amt, datepaid=datepaid, dateinvoiced=dateinvoiced,
-                      confirmationnum=confirmationnum, paymenturl=paymenturl, phonenum=phonenum, category=category, recurring=recurring)
+        self.createcompany(companyname,None,userid,companyid)
+        self.db.query(query,  billid=billid, companyid=companyid, amt=amt, datepaid=datepaid, 
+                      confirmationnum=confirmationnum, paymenturl=paymenturl,category=category, phonenum=phonenum,  recurring=recurring,duedate=duedate)
 
         
 
