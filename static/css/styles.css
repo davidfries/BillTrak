@@ -1,0 +1,39 @@
+h1, input[type="text"], input[type="password"]:focus,
+input[type="password"], .custbtn-drk textarea, tbody tr:hover
+{
+    background-color: rgb(209, 210, 211);
+}
+body
+{
+    background-color: rgb(56, 82, 82)
+}
+#modaltitle
+{
+    text-align: center
+}
+
+.custbg
+{
+    background-color: rgb(232, 181, 0);
+}
+
+.nav-item
+{
+    padding-left: 2px;
+}
+
+.custbtn-drk:hover
+{
+    background-color: slategrey
+}
+
+#dataviz{
+    float: right;
+    position: relative;
+    width:445px;
+    height:225px;
+    background-color: aquamarine;
+    margin-bottom: 1.5%;
+    margin-top: 1.5%;
+
+}

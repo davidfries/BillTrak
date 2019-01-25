@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form action="" method="post" role="form">
+    <div class="form-group">
+        
+        
+          <label for="userid"></label>
+          <input type="text"
+            class="form-control" name="userid" id="userid" aria-describedby="helpId" placeholder="Enter UserID">
+            <input type="password"
+            class="form-control" name="password" id="password" aria-describedby="helpId" placeholder="Enter Password">
+            <input type="email"
+            class="form-control" name="email" id="email" aria-describedby="helpId" placeholder="Enter email">
+
+
+
+
+        <button type="submit" class="btn custbtn-drk">Login</button>
+    </div>
+</form>
+
+
+
+{% endblock %}

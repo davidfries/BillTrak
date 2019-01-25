@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
+<form action="{{ url_for('logout')  }}" method="GET" >
+    <button type="submit" class="btn btn-dark">Logout</button>
 
+</form>
 <div class="container text-center">
     <table class="table">
         <thead>

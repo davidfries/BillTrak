@@ -31,7 +31,18 @@ class BTBackend():
     #     rows=self.db.query("select * from bills")
     #     print(rows.all().paymenturl)
     #     pass
-
+    def createuser(self,userid,password,email):
+        query='''
+        INSERT INTO users (userid, password,email) VALUES (
+        :userid,
+     crypt(:password, gen_salt('bf')),:email
+            );
+        '''
+        try:
+            
+            self.db.query(query,userid=userid,password=password,email=email)
+        except:
+            print("creaqte user error")
     def createcompany(self, companyname, datecreated, userid, companyid, category=None):
         
         query = "INSERT INTO company(companyid,companyname,datecreated,userid,category) VALUES(:companyid,:companyname,:datecreated,:userid,:category)"
@@ -69,8 +80,17 @@ class BTBackend():
     def validateuser(self, userid):
         pass
 
-    def validatepw(self, pw):
-        pass
+    def validatepw(self, password,userid):
+        query="""
+        SELECT *
+        FROM users
+        WHERE userid = :userid
+        AND password = crypt(:password, password);
+        """
+        rows=self.db.query(query,password=password,userid=userid).all()
+        print(len(rows)>0)
+        return len(rows)>0
+        
 
     def updatebillrecurring(self, billid):
         pass
