@@ -23,9 +23,11 @@ def billapp(username):
     else:
         billdata = BTBackend().getbilldata(str(username))
     try:
-        if session['logged_in']:
+        if session['logged_in'] and session['username']==username: #checks if the user is marked as logged in and if the username requested in url matches that token
+            
             return render_template('bills.html', billdata=billdata)
-
+        else:
+            return redirect('/')
     except:
         return redirect('/')
 
@@ -35,8 +37,9 @@ def userlogin():
 
     if request.method == 'POST':
         username = request.form['userid']
-        if(BTBackend().validatepw(request.form['password'],username)):
+        if(BTBackend().validatepw(request.form['password'],username)): #checks if password is valid
             session['logged_in']= True #this is important for displaying elements on main app page
+            session['username']=username #sets the session username token
             url="/bills/"+username
             return redirect(url) 
         else:

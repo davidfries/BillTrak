@@ -114,12 +114,4 @@ class BTBackend():
     def deletenotification(self, notificationid):
         pass
 
-# data = BTBackend().getbilldata('dj')
-# for bill in data:
-#     print (bill.amt)
 
-# BTBackend().debugprint()
-# print(BTBackend().getbillsbycompany('1'))
-# print(BTBackend().getamtbybillid('test0002'))
-# print(BTBackend().getamtbybillid('test0001'))
-# BTBackend().createbill('1','test0002','7762','1/17/2019','1/12/2019')
