@@ -107,11 +107,14 @@ class BTBackend():
                       confirmationnum=confirmationnum, paymenturl=paymenturl,category=category, phonenum=phonenum,  recurring=recurring,duedate=duedate)
 
         
+    def getnotifications(self):
+        query=""" 
+        select * from billdatabyuserid WHERE duedate = current_date + interval '3 day'
+        
+        """
+        rows=self.db.query(query).all()
 
-    def createnotification(self, notificationid, userid, useremail, billid, amt, phonenum, paymenturl):
-        pass
+        return rows
 
-    def deletenotification(self, notificationid):
-        pass
-
+    
 

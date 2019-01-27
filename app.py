@@ -1,9 +1,17 @@
 from flask import Flask, request, render_template, redirect, flash, session, abort
+from flask_mail import Mail
 from backend import BTBackend as BTBackend
 import os
 app = Flask(__name__)
 app.secret_key = os.urandom(12)
+app.config['MAIL_SERVER']='mail.billtrak.io'
+app.config['MAIL_PORT']='587'
+app.config['MAIL_USE_SSL']='True'
+app.config['MAIL_USERNAME']='admin'
+app.config['PASSWORD']=''
+app.config['MAIL_DEFAULT_SENDER']='notification@billtrak.io'
 
+mail=Mail(app)
 
 @app.route('/')
 def default():
@@ -59,6 +67,13 @@ def registeruser():
         
     else:
         return render_template('register.html')
+
+@app.route('/settings',methods=['GET','POST'])
+def managesettings():
+    pass
+
+def sendnotifications():
+    pass
 
 if __name__ == '__main__':
     

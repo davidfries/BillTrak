@@ -29,7 +29,17 @@
                 
                 </form>
             </li>
+            <li class="nav-item">
+                {% block logbtn %}
             
+                {% endblock %}
+            </li>
+            <li class="nav-item">
+                <form action="{{ url_for('managesettings')  }}" method="GET" >
+                    <button type="submit" class="btn custbtn-drk">Settings</button>
+                
+                </form>
+            </li>
             
         </ul>
         
