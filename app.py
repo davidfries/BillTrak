@@ -71,30 +71,37 @@ def registeruser():
 @app.route('/settings',methods=['GET','POST'])
 def managesettings():
     pass
-
+@app.route('/sendmail',methods=['POST'])
 def sendnotifications():
-    users=BTBackend().getnotifications()
-    with mail.connect() as conn:
-        for user in users:
-            message = """
-            Hello,
+    
+    if request.args.get('auth_token')==str('LB2JWxfAP9dqrdqNYY2LP3U8wQ'): #checks if auth token equals what is set here
+        print('notif method works as intended')
+        users=BTBackend().getnotifications()
+        with mail.connect() as conn:
+            for user in users:
+                message = """
+                Hello,
 
-            The bill for {companyname} is due on {duedate}. The total amount due is: {amt}
-            To pay your bill visit the following user-defined link: {paymenturl}
-            Alternatively, you can pay by phone at: {phonenum}
+                The bill for {companyname} is due on {duedate}. The total amount due is: {amt}
+                To pay your bill visit the following user-defined link: {paymenturl}
+                Alternatively, you can pay by phone at: {phonenum}
 
-            Sincerely,
-            BillTrak Notification Service
+                Sincerely,
+                BillTrak Notification Service
 
-            
-            
-            """.format(companyname=user.companyname,duedate=user.duedate,paymenturl=user.paymenturl,phonenum=user.phonenum)
-            subject = "BillDue Notification"
-            msg = Message(recipients=[BTBackend().getemailbyuserid(user.userid)],
-                        body=message,
-                        subject=subject)
+                
+                
+                """.format(companyname=user.companyname,duedate=user.duedate,paymenturl=user.paymenturl,phonenum=user.phonenum)
+                subject = "BillDue Notification"
+                msg = Message(recipients=[BTBackend().getemailbyuserid(user.userid)],
+                            body=message,
+                            subject=subject)
 
-            conn.send(msg)
+                conn.send(msg)
+        return '<h1>Notifications sent!</h1>'
+    else:
+        print('didn"t work with toekn')
+        return '<h1>Notifications failed!</h1>'
 
 if __name__ == '__main__':
     
