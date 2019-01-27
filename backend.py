@@ -49,7 +49,7 @@ class BTBackend():
         self.db.query(query, companyid=companyid, companyname=companyname,
                       datecreated=datecreated, category=category, userid=userid)
     def getbilldata(self,userid):
-        query="select * from billdatabyuserid WHERE userid=:userid"
+        query="select * from billdatabyuserid WHERE userid=:userid AND date_trunc('month', duedate) = date_trunc('month', current_date)"
         rows = self.db.query(query,userid=userid)
         return rows.all()
     def getbillsbycompany(self, companyid):
@@ -76,6 +76,9 @@ class BTBackend():
         query = "select recurring from bills where billid=:billid"
 
         return self.db.query(query, billid=billid).first()
+    def getemailbyuserid(self,userid):
+        query="SELECT email from users where userid=:userid"
+        return self.db.query(query, userid=userid).all()
 
     def validateuser(self, userid):
         pass

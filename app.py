@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, redirect, flash, session, abort
-from flask_mail import Mail
+from flask_mail import Mail,Message
 from backend import BTBackend as BTBackend
 import os
 app = Flask(__name__)
@@ -73,7 +73,28 @@ def managesettings():
     pass
 
 def sendnotifications():
-    pass
+    users=BTBackend().getnotifications()
+    with mail.connect() as conn:
+        for user in users:
+            message = """
+            Hello,
+
+            The bill for {companyname} is due on {duedate}. The total amount due is: {amt}
+            To pay your bill visit the following user-defined link: {paymenturl}
+            Alternatively, you can pay by phone at: {phonenum}
+
+            Sincerely,
+            BillTrak Notification Service
+
+            
+            
+            """.format(companyname=user.companyname,duedate=user.duedate,paymenturl=user.paymenturl,phonenum=user.phonenum)
+            subject = "BillDue Notification"
+            msg = Message(recipients=[BTBackend().getemailbyuserid(user.userid)],
+                        body=message,
+                        subject=subject)
+
+            conn.send(msg)
 
 if __name__ == '__main__':
     
