@@ -129,7 +129,7 @@ def addcompany():
 
 @app.route('/companies/<userid>',methods=['GET'])
 def companiesjson(userid):
-    return jsonify(BTBackend().getcompanyidsbyuserid(userid))#this should be JSON
+    return jsonify(BTBackend().getcompanynames(userid))#this should be JSON
 if __name__ == '__main__':
     
     app.run(port='5002', host="0.0.0.0")
