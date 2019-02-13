@@ -5,9 +5,11 @@ window.document.onload=function(){
         possibleMatches.push(data[i]);
       })
     
-      
+      $( "#tags" ).autocomplete({
+        source: availableTags
+      });
     });
-
+    
 
 
 };
