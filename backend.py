@@ -1,14 +1,9 @@
-import psycopg2
+
 import random
 import string
 import records
 
-#depreciated
-class COPG():
-    def conn(self):
-        conn = psycopg2.connect(
-            "host=192.168.5.172 dbname=billtrak user=dj password=Skyliner34")
-        return conn
+
 
 
 class BTBackend():
