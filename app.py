@@ -1,6 +1,7 @@
-from flask import Flask, request, render_template, redirect, flash, session, abort
+from flask import Flask, request, render_template, redirect, flash, session, abort,jsonify
 from flask_mail import Mail,Message
 from backend import BTBackend as BTBackend
+import datetime
 import os
 app = Flask(__name__)
 app.secret_key = os.urandom(12)
@@ -20,23 +21,17 @@ def default():
 
 @app.route('/bills/<username>', methods=['GET', 'POST'])
 def billapp(username):
-    if request.method == 'POST':
-        try:
-            BTBackend().createbill(BTBackend().gencharid(), request.form['billamt'], userid=username, companyname=request.form['companyname'],
-                                   duedate=request.form['duedate'], paymenturl=request.form['billurl'], phonenum=request.form['billtel'], recurring=request.form['recurring'])
-            url = "/bills/"+username
-            return redirect(url)
-        except Exception as err:
-            print(err)
-    else:
-        billdata = BTBackend().getbilldata(str(username))
+    
+    
+    
     try:
         if session['logged_in'] and session['username']==username: #checks if the user is marked as logged in and if the username requested in url matches that token
-            
-            return render_template('bills.html', billdata=billdata)
+            billdata = BTBackend().getbilldata(str(username))
+            return render_template('bills.html', billdata=billdata,userid=username)
         else:
             return redirect('/')
-    except:
+    except Exception as err:
+        print(err)
         return redirect('/')
 
 @app.route('/login', methods=['GET','POST'])
@@ -102,7 +97,41 @@ def sendnotifications():
     else:
         print('didn"t work with toekn')
         return '<h1>Notifications failed!</h1>'
+@app.route('/addbill',methods=['GET','POST'])
+def addbill():
+    try:
+        userid=session['username']
+    except:
+        print('error in username')
+    if request.method == 'POST':
+        # try:
+            BTBackend().createbill(BTBackend().gencharid(), request.form['billamt'], userid=userid, companyname=request.form['companyname'],
+                                   duedate=request.form['duedate'], paymenturl=request.form['billurl'], phonenum=request.form['billtel'], recurring=request.form['recurring'])
+            url = "/bills/"+userid
+            return redirect(url)
+        # except Exception as err:
+        #     print(err)
+    else:
+       return render_template('newbill.html')
+@app.route('/addcompany',methods=['GET','POST'])
+def addcompany():
+    userid=session['username']
+    if request.method == 'POST':
+        try:
+            current_time=datetime.datetime.now()
+            BTBackend().createcompany(request.form['companyname'],current_time.strftime('%m/%d/%Y'),userid)
+            url = "/bills/"+userid
+            return redirect(url)
+        except Exception as err:
+            print(err)
+    else:
+       return render_template('newcompany.html')
 
+@app.route('/companies/<userid>',methods=['GET'])
+def companiesjson(userid):
+    return jsonify(BTBackend().getcompanyidsbyuserid(userid))#this should be JSON
 if __name__ == '__main__':
     
     app.run(port='5002', host="0.0.0.0")
+
+#, ssl_context =('/var/docker-data/letsencrypt/live/billtrak.io/fullchain.pem','/var/docker-data/letsencrypt/live/billtrak.io/privkey.pem')

@@ -1,0 +1,9 @@
+docker run -p 587:587 -e maildomain=mail.billtrak.io -e smtp_user=billtrak:P$p6t@Z-2BSNSQ%S -v /path/to/certs:/etc/postfix/certs --name postfix -d catatnight/postfix
+
+
+ docker run --name letsencrypt-dns --volume /etc/letsencrypt/domains.conf:/etc/letsencrypt/domains.conf --volume /var/docker-data/letsencrypt:/etc/letsencrypt --env 'LETSENCRYPT_USER_MAIL=dfries4@gmail.com' --env 'LEXICON_PROVIDER=digitalocean' --env 'LEXICON_DIGITALOCEAN_AUTH_TOKEN=fe28874b4c93bd26edd070d6b9cb7eefcb8a1955717ce77a80a18dad5f473d33' -d adferrand/letsencrypt-dns
+
+
+ docker run --name letsencrypt-dns --volume /etc/letsencrypt/domains.conf:/etc/letsencrypt/domains.conf --volume /var/docker-data/letsencrypt:/etc/letsencrypt --env 'LETSENCRYPT_USER_MAIL=dfries4@gmail.com' --env 'LEXICON_PROVIDER=digitalocean' --env 'LEXICON_DIGITALOCEAN_AUTH_TOKEN=fe28874b4c93bd26edd070d6b9cb7eefcb8a1955717ce77a80a18dad5f473d33' -d  adferrand/letsencrypt-dns
+
+docker run --volumes-from letsencrypt-dns -d -p 443:5000 billtrak

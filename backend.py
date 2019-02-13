@@ -43,8 +43,8 @@ class BTBackend():
             self.db.query(query,userid=userid,password=password,email=email)
         except:
             print("creaqte user error")
-    def createcompany(self, companyname, datecreated, userid, companyid, category=None):
-        
+    def createcompany(self, companyname, datecreated, userid,  category=None):
+        companyid=self.genintid()
         query = "INSERT INTO company(companyid,companyname,datecreated,userid,category) VALUES(:companyid,:companyname,:datecreated,:userid,:category)"
         self.db.query(query, companyid=companyid, companyname=companyname,
                       datecreated=datecreated, category=category, userid=userid)
@@ -66,11 +66,11 @@ class BTBackend():
 
     def getcompanyidsbyuserid(self, userid):
         query = "select companyid from company where userid = :userid"
-        return self.db.query(query, userid=userid).all
+        return self.db.query(query, userid=userid).all()
 
     def getcompanynames(self,userid):
         query = "select companyname from company where userid = :userid"
-        return self.db.query(query, userid=userid).all
+        return self.db.query(query, userid=userid).export('json')#exports rows to JSON for request from JS
 
     def getbillrecurringstatus(self, billid):
         query = "select recurring from bills where billid=:billid"
@@ -102,10 +102,13 @@ class BTBackend():
         query = "DELETE FROM bills WHERE billid=:billid"
         self.db.query(query, billid=billid)
 
+    def getcompanyidbyname(self,companyname):
+        return "None"
+
     def createbill(self,  billid, amt,  duedate, recurring,userid,companyname,companyid=None,datepaid=None, paymenturl=None, phonenum=None, category=None, confirmationnum=None):
         query = "INSERT INTO bills(billid,companyid,amt,datepaid,confirmationnum,paymenturl,category,phonenum,recurring,duedate) VALUES(:billid,:companyid,:amt,:datepaid,:confirmationnum,:paymenturl,:category,:phonenum,:recurring,:duedate)"
-        companyid=self.genintid()
-        self.createcompany(companyname,None,userid,companyid)
+        
+        companyid=self.getcompanyidbyname(companyname)
         self.db.query(query,  billid=billid, companyid=companyid, amt=amt, datepaid=datepaid, 
                       confirmationnum=confirmationnum, paymenturl=paymenturl,category=category, phonenum=phonenum,  recurring=recurring,duedate=duedate)
 

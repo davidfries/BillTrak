@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+
+
+
+
+{% block content %}
+<form action="" method="POST" role="form">
+        <div class="form-group">
+          <label for=""></label>
+          <input type="text"
+            class="form-control" name="companyname" id="companyname" aria-describedby="helpId" placeholder="Company Name">
+            <input type="date"
+            class="form-control" name="duedate" id="duedate" aria-describedby="helpId" placeholder="Due Date">
+            <!-- Replace the above with jquery date picker -->
+            <input type="text"
+            class="form-control" name="billamt" id="billamt" aria-describedby="helpId" placeholder="$50.45 - Amount">
+            <input type="url"
+            class="form-control" name="billurl" id="billurl" aria-describedby="helpId" placeholder="https://paymybill.com">
+            <input type="tel"
+            class="form-control" name="billtel" id="billtel" aria-describedby="helpId" placeholder="555-555-5555">
+
+
+            <label for='recurring'>Recurring Bill?</label><br>
+            <input type="radio" name="recurring" value="true" checked> Yes<br>
+            <input type="radio" name="recurring" value="false"> No<br>
+            
+        </div>
+    
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+    </form>
+    <!-- ends content -->
+    {% endblock %}
+
