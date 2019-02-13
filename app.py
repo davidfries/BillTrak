@@ -127,9 +127,9 @@ def addcompany():
     else:
        return render_template('newcompany.html')
 
-@app.route('/companies/<userid>',methods=['GET'])
-def companiesjson(userid):
-    return jsonify(BTBackend().getcompanynames(userid))#this should be JSON
+@app.route('/companies',methods=['GET'])
+def companiesjson():
+    return jsonify(BTBackend().getcompanynames(session['username']))#this should be JSON
 if __name__ == '__main__':
     
     app.run(port='5002', host="0.0.0.0")
