@@ -112,7 +112,8 @@ def addbill():
         # except Exception as err:
         #     print(err)
     else:
-       return render_template('newbill.html')
+       data=BTBackend().getcompanynames(session['username'])
+       return render_template('newbill.html',data=data)
 @app.route('/addcompany',methods=['GET','POST'])
 def addcompany():
     userid=session['username']
@@ -127,9 +128,12 @@ def addcompany():
     else:
        return render_template('newcompany.html')
 
-@app.route('/companies',methods=['GET'])
-def companiesjson():
-    return jsonify(matching_results=BTBackend().getcompanynames(session['username']))#this should be JSON
+# @app.route('/companies',methods=['GET','POST'])
+# def companiesjson():
+#     if(request.method=='POST'):
+#         print('postedcompanies')
+#     print(BTBackend().getcompanynames(session['username']))
+#     return BTBackend().getcompanynames(session['username'])#this should be JSON
 if __name__ == '__main__':
     
     app.run(port='5002', host="0.0.0.0")

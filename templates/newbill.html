@@ -7,29 +7,37 @@
 
 
 {% block content %}
-<script type="text/javascript">
-    $(function() {
-        $("#tags").autocomplete({
-            source:function(request, response) {
-                $.getJSON("{{url_for('companiesjson')}}",{
-                    q: request.term, // in flask, "q" will be the argument to look for using request.args
-                }, function(data) {
-                    response(data.matching_results); // matching_results from jsonify
-                });
-            },
-            minLength: 2,
-            select: function(event, ui) {
-                console.log(ui.item.value); // not in your question, but might help later
-            }
-        });
+<!-- <script type="text/javascript">
+   
+        let dropdown = $('#companies');
+
+        dropdown.empty()
+        dropdown.append('<option selected="true" disabled>Choose a company</option>')
+        dropdown.prop('selectedIndex',0);
+
+        url='http://localhost:5002/companies'
+        $.getJSON(url, function(data){
+            console.log(data);
+            $.each(data,function(key, entry){
+                console.log(entry.name)
+        dropdown.append($('<option></option>').attr('value', entry.name).text(entry.name))
+    })
     })
     
-    </script>
+    
+        
+    
+    </script> -->
 <form action="" method="POST" role="form">
         <div class="form-group">
           <label for=""></label>
-          <input type="text" id="tags"
-            class="form-control" name="companyname" id="companyname" aria-describedby="helpId" placeholder="Company Name">
+            <select name="companyname" class="form-control" id="companies">
+                {% for company in data %}
+                    <option>{{company.name}}</option>
+                {% endfor %}
+                
+
+            </select>
             <input type="date"
             class="form-control" name="duedate" id="duedate" aria-describedby="helpId" placeholder="Due Date">
             <!-- Replace the above with jquery date picker -->

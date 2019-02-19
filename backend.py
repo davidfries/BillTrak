@@ -65,7 +65,15 @@ class BTBackend():
 
     def getcompanynames(self,userid):
         query = "select companyname from company where userid = :userid"
-        return self.db.query(query, userid=userid).export('json')#exports rows to JSON for request from JS
+        rows =self.db.query(query, userid=userid).all()#exports rows to JSON for request from JS
+        data=[]
+        
+        for row in rows:
+            
+            dat={"name":row.companyname
+            }
+            data.append(dat)
+        return data
 
     def getbillrecurringstatus(self, billid):
         query = "select recurring from bills where billid=:billid"
@@ -98,7 +106,10 @@ class BTBackend():
         self.db.query(query, billid=billid)
 
     def getcompanyidbyname(self,companyname):
-        return "None"
+        query= "SELECT companyid from company where companyname=:companyname"
+        rows =self.db.query(query,companyname=companyname).first()
+        
+        return rows.companyid
 
     def createbill(self,  billid, amt,  duedate, recurring,userid,companyname,companyid=None,datepaid=None, paymenturl=None, phonenum=None, category=None, confirmationnum=None):
         query = "INSERT INTO bills(billid,companyid,amt,datepaid,confirmationnum,paymenturl,category,phonenum,recurring,duedate) VALUES(:billid,:companyid,:amt,:datepaid,:confirmationnum,:paymenturl,:category,:phonenum,:recurring,:duedate)"

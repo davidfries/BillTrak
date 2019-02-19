@@ -10,9 +10,9 @@ window.document.onload=function(){
                 });
             },
             
-            select: function(event, ui) {
-                console.log(ui.item.value); // not in your question, but might help later
-            }
+            // select: function(event, ui) {
+            //     console.log(ui.item.value); // not in your question, but might help later
+            // }
         });
     })
     
