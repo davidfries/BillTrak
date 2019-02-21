@@ -107,8 +107,9 @@ class BTBackend():
 
     def updatebillrecurring(self, billid,recurring):
         query="update bills set recurring=:recurring where billid=:billid"
-        self.db.query(query,billid=billid,recurring=!recurring)
         
+        self.db.query(query,billid=billid,recurring=not recurring)
+
 
     def deletebill(self, billid):
         query = "DELETE FROM bills WHERE billid=:billid"
