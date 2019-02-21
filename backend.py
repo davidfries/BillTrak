@@ -98,8 +98,17 @@ class BTBackend():
         return len(rows)>0
         
 
-    def updatebillrecurring(self, billid):
-        pass
+    def updatebillamt(self,billid,amt):
+        query="UPDATE bills SET amt=:amt,where billid=:billid "
+        try:
+            self.db.query(query,amt=amt,billid=billid)
+        except:
+            print("error in bill amt update")
+
+    def updatebillrecurring(self, billid,recurring):
+        query="update bills set recurring=:recurring where billid=:billid"
+        self.db.query(query,billid=billid,recurring=!recurring)
+        
 
     def deletebill(self, billid):
         query = "DELETE FROM bills WHERE billid=:billid"

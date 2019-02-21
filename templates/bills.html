@@ -69,8 +69,10 @@
                                     <form action="" method="POST" role="form">
                                     <div class="form-group">
                                       <label for=""></label>
-                                      <input type="text"
-                                        class="form-control" name="companyname" id="companyname" aria-describedby="helpId" placeholder="Company Name">
+                                      <select name="companyname" class="form-control" id="companies">
+                                        {% for company in data %}
+                                            <option>{{company.name}}</option>
+                                        {% endfor %}
                                         <input type="date"
                                         class="form-control" name="duedate" id="duedate" aria-describedby="helpId" placeholder="Due Date">
                                         <!-- Replace the above with jquery date picker -->
