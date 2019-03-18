@@ -5,7 +5,8 @@ CREATE VIEW billdatabyuserid AS
     bills.amt,
     bills.duedate,
     bills.phonenum,
-    bills.paymenturl
+    bills.paymenturl,
+    bills.companyname
    FROM users
      JOIN company USING (userid)
      JOIN bills USING (companyid);

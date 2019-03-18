@@ -54,7 +54,7 @@ class BTBackend():
         return rows.all()
 
     def getbillinfo(self, billid):
-        query = "select * from bills where billid=:billid"
+        query = "select * from billdatabyuserid WHERE billid=:billid"
 
         rows = self.db.query(query, billid=billid).first()
         return rows
