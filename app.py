@@ -57,7 +57,7 @@ def logout():
     session['logged_in']=False
     return redirect('/')
 
-@app.route('edit/<billid>', methods=['GET','POST'])
+@app.route('/edit/<billid>', methods=['GET','POST'])
 def editbill(billid):
     if request.method=='POST':
         pass

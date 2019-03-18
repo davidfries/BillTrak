@@ -53,51 +53,11 @@
                 <td>{{ bill.duedate }}</td>
                 <td> {{ bill.amt }} </td>
                 <td>
-                        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#editbills">
-                                Edit Bill
-                              </button>
-                    <div class="modal fade" id="editbills" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Edit Bill</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form action="" method="POST" role="form">
-                                    <div class="form-group">
-                                      <label for=""></label>
-                                      <select name="companyname" class="form-control" id="companies">
-                                        {% for company in data %}
-                                            <option>{{company.name}}</option>
-                                        {% endfor %}
-                                        <input type="date"
-                                        class="form-control" name="duedate" id="duedate" aria-describedby="helpId" placeholder="Due Date">
-                                        <!-- Replace the above with jquery date picker -->
-                                        <input type="text"
-                                        class="form-control" name="billamt" id="billamt" aria-describedby="helpId" placeholder="$50.45 - Amount">
-                                        <input type="url"
-                                        class="form-control" name="billurl" id="billurl" aria-describedby="helpId" placeholder="https://paymybill.com">
-                                        <input type="tel"
-                                        class="form-control" name="billtel" id="billtel" aria-describedby="helpId" placeholder="555-555-5555">
-                
-                
-                                        <label for='recurring'>Recurring Bill?</label><br>
-                                        <input type="radio" name="recurring" value="true" checked> Yes<br>
-                                        <input type="radio" name="recurring" value="false"> No<br>
-                                        
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save</button>
-                                </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <form action="{{ url_for('editbill',billid=bill.billid) }}" method="GET" >
+                            <button type="submit" class="btn custbtn-drk">Edit</button>
+                        
+                        </form>
+                                          
 
                 </td>
                 <td><div id="paidswitch"></div></td> 
