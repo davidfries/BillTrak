@@ -57,6 +57,14 @@ def logout():
     session['logged_in']=False
     return redirect('/')
 
+@app.route('edit/<billid>', methods=['GET','POST'])
+def editbill(billid):
+    if request.method=='POST':
+        pass
+    else:
+        bill=BTBackend().getbillinfo(billid)
+        return render_template('edit.html',bill=bill)
+
 @app.route('/register',methods=['GET','POST'])
 def registeruser():
     if request.method=='POST':

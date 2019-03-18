@@ -53,11 +53,11 @@ class BTBackend():
         rows = self.db.query(query, companyid=self.getcompanyidbyname(companyname))
         return rows.all()
 
-    def getamtbybillid(self, billid):
+    def getbillinfo(self, billid):
         query = "select * from bills where billid=:billid"
 
         rows = self.db.query(query, billid=billid).first()
-        return rows.amt
+        return rows
 
     def getcompanyidsbyuserid(self, userid):
         query = "select companyid from company where userid = :userid"
