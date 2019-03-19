@@ -63,6 +63,11 @@ class BTBackend():
         query = "select companyid from company where userid = :userid"
         return self.db.query(query, userid=userid).all()
 
+    def getcompanycount(self,userid):
+        query = "select companyname from company where userid = :userid"
+        rows =self.db.query(query, userid=userid).all()
+        return len(rows)
+
     def getcompanynames(self,userid):
         query = "select companyname from company where userid = :userid"
         rows =self.db.query(query, userid=userid).all()#exports rows to JSON for request from JS

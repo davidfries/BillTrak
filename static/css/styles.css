@@ -17,6 +17,10 @@ body
     background-color: rgb(232, 181, 0);
 }
 
+.nav{
+    padding: 5px;
+}
+
 .nav-item
 {
     padding-left: 2px;
