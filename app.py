@@ -3,6 +3,7 @@ from flask_mail import Mail,Message
 from backend import BTBackend as BTBackend
 import datetime
 import os
+from secrets import secrets as secrets
 app = Flask(__name__)
 app.secret_key = os.urandom(12)
 app.config['MAIL_SERVER']='mail.billtrak.io'
@@ -80,7 +81,7 @@ def managesettings():
 @app.route('/sendmail',methods=['POST'])
 def sendnotifications():
     
-    if request.args.get('auth_token')==str('LB2JWxfAP9dqrdqNYY2LP3U8wQ'): #checks if auth token equals what is set here
+    if request.args.get('auth_token')==str(f'{secrets.emailkey}'): #checks if auth token equals what is set here
         print('notif method works as intended')
         users=BTBackend().getnotifications()
         with mail.connect() as conn:
