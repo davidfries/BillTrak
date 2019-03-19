@@ -28,7 +28,7 @@ def billapp(username):
         if session['logged_in'] and session['username']==username: #checks if the user is marked as logged in and if the username requested in url matches that token
             billdata = BTBackend().getbilldata(str(username))
             compdata=BTBackend().getcompanynames(str(username))
-            billcount= BTBackend().getcompanycount(username)
+            companycount= BTBackend().getcompanycount(username)
             return render_template('bills.html', billdata=billdata,userid=username,data=compdata, companycount=companycount)
         else:
             return redirect('/')
