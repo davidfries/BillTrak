@@ -22,8 +22,7 @@ def default():
 @app.route('/bills/<username>', methods=['GET', 'POST'])
 def billapp(username):
     
-    if(request.method=='POST'):
-        pass
+    
     
     try:
         if session['logged_in'] and session['username']==username: #checks if the user is marked as logged in and if the username requested in url matches that token
@@ -60,7 +59,8 @@ def logout():
 @app.route('/edit/<billid>', methods=['GET','POST'])
 def editbill(billid):
     if request.method=='POST':
-        pass
+        BTBackend().editbills(billid,request.form['billamt'],request.form['duedate'],request.form['billtel'],request.form['billurl'])
+        return redirect('/bills/'+session['username'])
     else:
         bill=BTBackend().getbillinfo(billid)
         return render_template('edit.html',bill=bill)

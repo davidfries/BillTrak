@@ -97,6 +97,12 @@ class BTBackend():
         print(len(rows)>0)
         return len(rows)>0
         
+    def editbills(self,billid,amt,duedate,phonenum,paymenturl):
+        query="UPDATE bills SET amt=:amt, duedate=:duedate,paymenturl=:paymenturl,phonenum=:phonenum where billid=:billid "
+        try:
+            self.db.query(query,amt=amt,billid=billid,duedate=duedate,paymenturl=paymenturl,phonenum=phonenum)
+        except Exception as e:
+            print(e)
 
     def updatebillamt(self,billid,amt):
         query="UPDATE bills SET amt=:amt,where billid=:billid "
