@@ -17,15 +17,17 @@
     </form>
 
 {% endblock %}
+{% block addbill %}
 {% if companycount >0 %}
-    {% block addbill %}
+    
     <form action="{{ url_for('addbill')  }}" method="GET" >
             <button type="submit" class="btn custbtn-drk">New Bill</button>
         
         </form>
-    {% endblock %}
+    {% else %}
+        {{ super() }}
 {% endif %}
-
+{% endblock %}
 
 
 {% block addcompany %}

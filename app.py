@@ -30,6 +30,7 @@ def billapp(username):
             billdata = BTBackend().getbilldata(str(username))
             compdata=BTBackend().getcompanynames(str(username))
             companycount= BTBackend().getcompanycount(username)
+            print(companycount)
             return render_template('bills.html', billdata=billdata,userid=username,data=compdata, companycount=companycount)
         else:
             return redirect('/')
