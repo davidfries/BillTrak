@@ -9,7 +9,7 @@ from secrets import secrets as secrets
 class BTBackend():
     try:
         db = records.Database(
-            f"postgresql://192.168.5.172/billtrak?user=dj&password={secrets.dbpw}")
+            f"postgresql://192.168.5.171/billtrak?user=dj&password={secrets.dbpw}")
     except:
         print("error in db connection")
 
@@ -132,7 +132,7 @@ class BTBackend():
         
         return rows.companyid
 
-    def createbill(self,  billid, amt,  duedate, recurring,userid,companyname,companyid=None,datepaid=None, paymenturl=None, phonenum=None, category=None, confirmationnum=None):
+    def createbill(self,  billid, amt,  duedate, recurring,userid,companyname,confirmationnum,companyid=None,datepaid=None, paymenturl=None, phonenum=None, category=None):
         query = "INSERT INTO bills(billid,companyid,amt,datepaid,confirmationnum,paymenturl,category,phonenum,recurring,duedate) VALUES(:billid,:companyid,:amt,:datepaid,:confirmationnum,:paymenturl,:category,:phonenum,:recurring,:duedate)"
         
         companyid=self.getcompanyidbyname(companyname)

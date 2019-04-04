@@ -119,7 +119,8 @@ def addbill():
     if request.method == 'POST':
         # try:
             BTBackend().createbill(BTBackend().gencharid(), request.form['billamt'], userid=userid, companyname=request.form['companyname'],
-                                   duedate=request.form['duedate'], paymenturl=request.form['billurl'], phonenum=request.form['billtel'], recurring=request.form['recurring'])
+                                   duedate=request.form['duedate'], paymenturl=request.form['billurl'], phonenum=request.form['billtel'], recurring=request.form['recurring'],
+                                   confirmationnum=request.form['confirmationnum'])
             url = "/bills/"+userid
             return redirect(url)
         # except Exception as err:
