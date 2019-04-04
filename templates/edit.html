@@ -33,7 +33,7 @@
         <input type="tel"
         class="form-control" name="billtel" id="billtel" aria-describedby="helpId" placeholder="555-555-5555" value="{{ bill.phonenum }}">
         <input type="text"
-            class="form-control" name="confirmationnum" id="confirmationnum" aria-describedby="helpId" value="{{ bill.confirmationnum }}">
+            class="form-control" name="confirmationnum" id="confirmationnum" aria-describedby="helpId" placeholder="XJF-111-222" value="{{ bill.confirmationnum }}">
 
         <label for='recurring'>Recurring Bill?</label><br>
         {% if bill.recurring %}
