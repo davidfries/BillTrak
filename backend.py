@@ -9,7 +9,7 @@ from secrets import secrets as secrets
 class BTBackend():
     try:
         db = records.Database(
-            f"postgresql://192.168.5.171/billtrak?user=dj&password={secrets.dbpw}")
+            f"postgresql://192.168.5.172/billtrak?user=dj&password={secrets.dbpw}")
     except:
         print("error in db connection")
 
