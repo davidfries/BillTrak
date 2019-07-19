@@ -111,41 +111,78 @@ def sendnotifications():
     else:
         print('didn"t work with toekn')
         return '<h1>Notifications failed!</h1>'
-@app.route('/addbill',methods=['GET','POST'])
-def addbill():
-    try:
-        userid=session['username']
-    except:
-        print('error in username')
-    if request.method == 'POST':
-        try:
-            BTBackend().createbill(BTBackend().gencharid(), request.form['billamt'], userid=userid, companyname=request.form['companyname'],
-                                   duedate=request.form['duedate'], paymenturl=request.form['billurl'], phonenum=request.form['billtel'], recurring=request.form['recurring'],
-                                   confirmationnum=request.form['confirmationnum'])
-            url = "/bills/"+userid
-            return redirect(url)
-        except Exception as err:
-            print(err)
+# @app.route('/addbill',methods=['GET','POST'])
+# def addbill():
+#     try:
+#         userid=session['username']
+#     except:
+#         print('error in username')
+#     if request.method == 'POST':
+#         try:
+#             BTBackend().createbill(BTBackend().gencharid(), request.form['billamt'], userid=userid, companyname=request.form['companyname'],
+#                                    duedate=request.form['duedate'], paymenturl=request.form['billurl'], phonenum=request.form['billtel'], recurring=request.form['recurring'],
+#                                    confirmationnum=request.form['confirmationnum'])
+#             url = "/bills/"+userid
+#             return redirect(url)
+#         except Exception as err:
+#             print(err)
+#     else:
+#        data=BTBackend().getcompanynames(session['username'])
+#        return render_template('newbill.html',data=data,userid=userid)
+
+@app.route('/api/v1/getbills',methods=['GET'])
+def getbillsapi():
+    if(request.method == 'GET'):
+        inc=request.get_json()
+        data=BTBackend().getcompanynames(inc['username'])
+        return jsonify(data)
     else:
-       data=BTBackend().getcompanynames(session['username'])
-       return render_template('newbill.html',data=data,userid=userid)
-@app.route('/addcompany',methods=['GET','POST'])
-def addcompany():
-    userid=session['username']
+        return jsonify({"Error": "POST is not supported on this endpoint"})
+@app.route('/api/v1/addbill',methods=['POST'])
+def addbillapi():
+    if request.method == 'POST':
+        data=request.get_json()
+        if(data):
+            try:
+                BTBackend().createbill(BTBackend().gencharid(), data['billamt'], userid=data['userid'], companyname=data['companyname'],
+                                    duedate=data['duedate'], paymenturl=data['billurl'], phonenum=data['billtel'], recurring=data['recurring'],
+                                    confirmationnum=data['confirmationnum'])
+                
+            except Exception as err:
+                print(err)
+        else:
+            return jsonify({"Error":"You sent an empty bill!"})
+
+# @app.route('/addcompany',methods=['GET','POST'])
+# def addcompany():
+#     userid=session['username']
+#     if request.method == 'POST':
+#         try:
+#             current_time=datetime.datetime.now()
+#             BTBackend().createcompany(request.form['companyname'],current_time.strftime('%m/%d/%Y'),userid)
+#             url = "/bills/"+userid
+#             return redirect(url)
+#         except Exception as err:
+#             print(err)
+#     else:
+#        return render_template('newcompany.html')
+
+@app.route('/api/v1/addcompany/',methods=['POST'])
+def addcompanyapi():
+    userid='djf'
     if request.method == 'POST':
         try:
             current_time=datetime.datetime.now()
-            BTBackend().createcompany(request.form['companyname'],current_time.strftime('%m/%d/%Y'),userid)
-            url = "/bills/"+userid
-            return redirect(url)
+            data=request.get_json()
+            print(data)
+            BTBackend().createcompany(data['companyname'],current_time.strftime('%m/%d/%Y'),userid)
+            # url = "/bills/"+userid
+            return jsonify({"data":{"response":"Sucessful post!","postdata":data['companyname']}})
         except Exception as err:
             print(err)
-    else:
-       return render_template('newcompany.html')
 
 
-
-@app.route('/api/v1/<userid>')
+@app.route('/api/v1/companyids/<userid>')
 def getcompanyidsjson(userid):
     companyids=BTBackend().getcompanyidsbyuserid(userid)
     print(len(companyids))
