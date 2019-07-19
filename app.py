@@ -127,7 +127,7 @@ def addbill():
         #     print(err)
     else:
        data=BTBackend().getcompanynames(session['username'])
-       return render_template('newbill.html',data=data)
+       return render_template('newbill.html',data=data,userid=userid)
 @app.route('/addcompany',methods=['GET','POST'])
 def addcompany():
     userid=session['username']
