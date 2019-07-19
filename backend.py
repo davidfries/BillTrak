@@ -46,22 +46,22 @@ class BTBackend():
     def getbilldata(self,userid):
         query="select * from billdatabyuserid WHERE userid=:userid AND date_trunc('month', duedate) = date_trunc('month', current_date)"
         rows = self.db.query(query,userid=userid)
-        return rows.all()
+        return rows.export('json')
     def getbillsbycompany(self, companyid,companyname):
         query = "select * from bills where companyid=:companyid"
 
-        rows = self.db.query(query, companyid=self.getcompanyidbyname(companyname))
-        return rows.all()
+        rows = self.db.query(query, companyid=self.getcompanyidbyname(companyname)).export('json')
+        return rows.export('json')
 
     def getbillinfo(self, billid):
         query = "select * from billdatabyuserid WHERE billid=:billid"
 
-        rows = self.db.query(query, billid=billid).first()
+        rows = self.db.query(query, billid=billid).export('json')
         return rows
 
     def getcompanyidsbyuserid(self, userid):
         query = "select companyid from company where userid = :userid"
-        return self.db.query(query, userid=userid).all()
+        return self.db.query(query, userid=userid).export('json')
 
     def getcompanycount(self,userid):
         query = "select companyname from company where userid = :userid"
