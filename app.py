@@ -1,5 +1,6 @@
-from flask import Flask, request, render_template, redirect, flash, session, abort,jsonify
+from flask import Flask, request, render_template, redirect, flash, session, abort,jsonify,abort
 from flask_mail import Mail,Message
+from flask_restful import Api, Resource
 from backend import BTBackend as BTBackend
 import datetime
 import os
@@ -14,7 +15,7 @@ app.config['PASSWORD']=''
 app.config['MAIL_DEFAULT_SENDER']='notification@billtrak.io'
 
 mail=Mail(app)
-
+api = Api(app)
 @app.route('/')
 def default():
     return render_template('index.html')
@@ -141,6 +142,23 @@ def addcompany():
             print(err)
     else:
        return render_template('newcompany.html')
+
+
+
+@app.route('/api/v1/<userid>')
+def getcompanyidsjson(userid):
+    companyids=BTBackend().getcompanyidsbyuserid(userid)
+    print(len(companyids))
+    if(len(companyids)>2):
+        return jsonify({"data":companyids})
+    else:
+        params= {
+            "error":"CompanyIDs not Found"
+        }
+        return jsonify(params)
+
+
+
 
 # @app.route('/companies',methods=['GET','POST'])
 # def companiesjson():

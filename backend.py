@@ -50,7 +50,7 @@ class BTBackend():
     def getbillsbycompany(self, companyid,companyname):
         query = "select * from bills where companyid=:companyid"
 
-        rows = self.db.query(query, companyid=self.getcompanyidbyname(companyname)).export('json')
+        rows = self.db.query(query, companyid=self.getcompanyidbyname(companyname))
         return rows.export('json')
 
     def getbillinfo(self, billid):
