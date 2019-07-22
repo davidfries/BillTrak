@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<form action="" method="post" role="form">
+<form action="" method="post" role="form" oninput='up2.setCustomValidity(up2.value != up.value ? "Passwords do not match." : "")'></form>
     <div class="form-group">
         
         
@@ -9,14 +9,16 @@
           <input type="text" required
             class="form-control" name="userid" id="userid" aria-describedby="helpId" placeholder="Enter UserID">
             <input type="password" required pattern="^(?:(?=.*[a-z])(?:(?=.*[A-Z])(?=.*[\d\W])|(?=.*\W)(?=.*\d))|(?=.*\W)(?=.*[A-Z])(?=.*\d)).{8,}$"
-            class="form-control" name="password" id="password" aria-describedby="helpId" placeholder="Enter Password">
+            class="form-control" name="password" id="password" aria-describedby="helpId" placeholder="Enter Password" name="up">
+            <input type="password" required pattern="^(?:(?=.*[a-z])(?:(?=.*[A-Z])(?=.*[\d\W])|(?=.*\W)(?=.*\d))|(?=.*\W)(?=.*[A-Z])(?=.*\d)).{8,}$"
+            class="form-control" name="passwordconf" id="passwordconf" aria-describedby="helpId" placeholder="Confirm Password" name="up2">
             <input type="email"
             class="form-control" name="email" id="email" aria-describedby="helpId" placeholder="Enter email">
 
 
 
 
-        <button type="submit" class="btn custbtn-drk">Login</button>
+        <button type="submit" class="btn custbtn-drk">Register!</button>
     </div>
 </form>
 
