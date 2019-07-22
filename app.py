@@ -134,7 +134,7 @@ def sendnotifications():
 def getbillsapi():
     if(request.method == 'GET'):
         inc=request.get_json()
-        data=BTBackend().getcompanynames(inc['username'])
+        data=BTBackend().getbilldata(inc['username'])
         return jsonify(data)
     else:
         return jsonify({"Error": "POST is not supported on this endpoint"})
@@ -169,22 +169,23 @@ def addbillapi():
 
 @app.route('/api/v1/addcompany/',methods=['POST'])
 def addcompanyapi():
-    userid='djf'
+    
     if request.method == 'POST':
         try:
             current_time=datetime.datetime.now()
             data=request.get_json()
             print(data)
-            BTBackend().createcompany(data['companyname'],current_time.strftime('%m/%d/%Y'),userid)
+            BTBackend().createcompany(data['companyname'],current_time.strftime('%m/%d/%Y'),data['userid'])
             # url = "/bills/"+userid
             return jsonify({"data":{"response":"Sucessful post!","postdata":data['companyname']}})
         except Exception as err:
             print(err)
 
 
-@app.route('/api/v1/companyids/<userid>')
-def getcompanyidsjson(userid):
-    companyids=BTBackend().getcompanyidsbyuserid(userid)
+@app.route('/api/v1/companyids/')
+def getcompanyidsjson():
+    data=request.get_json()
+    companyids=BTBackend().getcompanyidsbyuserid(data['userid'])
     print(len(companyids))
     if(len(companyids)>2):
         return jsonify({"data":companyids})
