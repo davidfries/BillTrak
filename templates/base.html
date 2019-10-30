@@ -1,94 +1,104 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <title>BillTrak</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
-  </head>
-  <body>
-      
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css"
+        integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+</head>
+
+<body>
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    
+
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/easy-autocomplete.min.css') }}">
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
-    
-    
-   
 
-    <script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
-  <script
-  src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
-  crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.0/css/bulma.css">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+        integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script> -->
     <script src="{{ url_for('static',filename='js/jquery.autocomplete.js') }}"></script>
-   {% block extrascripts %}
-   {% endblock %}
+    {% block extrascripts %}
+    {% endblock %}
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="https://bulma.io">
+                <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+            </a>
 
-    <div class="container p-3 mb-2 custbg text-dark text-center">
-        <!-- Nav tabs -->
-        <div id="navcontainer">
-        <ul class="nav nav-tabs|pills" id="navId">
-            <li class="nav-item">
-                <form action="{{ url_for('default')  }}" method="GET" >
-                    <button type="submit" class="btn custbtn-drk">Home</button>
-                
-                </form>
-            </li>
-            <li class="nav-item">
-                {% block logbtn %}
-            
-                {% endblock %}
-            </li>
-            <li class="nav-item">
-            {% block settings %}
-            
-            {% endblock %}
-            </li>
-            <li class="nav-item">{% block addbill %}
-            
-                    {% endblock %}</li>
-            <li class="nav-item">
-                    {% block addcompany %}
-                    
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+                data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <a href="{{ url_for('default')  }}" class="navbar-item">
+                    Home
+                </a>
+                <div class="navbar-item">
+                    <a class="button is-light" href="{{ url_for('logout')  }}">
+
+                    </a>
+                </div>
+                <div class="navbar-item">
+                    <!-- Addbill -->
+                    {% block addbill %}
+
                     {% endblock %}
+                </div>
+                <div class="navbar-item">
+                    <a class="button is-primary">
+                        <!-- AddCompany -->
 
-            </li>
-        </ul>
-        
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <div class="tab-pane fade show active" id="tab1Id" role="tabpanel"></div>
-            <div class="tab-pane fade" id="tab2Id" role="tabpanel"></div>
-            <div class="tab-pane fade" id="tab3Id" role="tabpanel"></div>
-            <div class="tab-pane fade" id="tab4Id" role="tabpanel"></div>
-            <div class="tab-pane fade" id="tab5Id" role="tabpanel"></div>
-        </div>
-        
-        <script>
-            $('#navId a').click(e => {
-                e.preventDefault();
-                $(this).tab('show');
-            });
-        </script>
-        </div>
+                    </a>
+                </div>
+                <div class="navbar-item">
+                    <a class="button is-primary" href="{{ url_for('managesettings')  }}">
+
+                        <!-- Settings -->
+                    </a>
+                </div>
 
 
-        {% block content %}
-        
-        {% endblock %}
+
+            </div>
+    </nav>
+
+
+
+
+
+
+
+
+
+
+    {% block content %}
+
+    {% endblock %}
 
     </div>
 
 </body>
+
 </html>

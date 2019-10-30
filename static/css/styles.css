@@ -1,7 +1,4 @@
-h1, input, .custbtn-drk textarea, tbody tr:hover
-{
-    background-color: rgb(131, 155, 179);
-}
+
 body
 {
     background-color: rgb(56, 82, 82)
@@ -11,10 +8,7 @@ body
     text-align: center
 }
 
-.custbg
-{
-    background-color: rgb(232, 181, 0);
-}
+
 
 .nav{
     padding: 5px;
@@ -25,10 +19,6 @@ body
     padding-left: 2px;
 }
 
-.custbtn-drk:hover
-{
-    background-color: slategrey
-}
 
 #dataviz{
     float: right;
