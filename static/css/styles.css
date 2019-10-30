@@ -14,19 +14,3 @@ body
     padding: 5px;
 }
 
-.nav-item
-{
-    padding-left: 2px;
-}
-
-
-#dataviz{
-    float: right;
-    position: relative;
-    width:445px;
-    height:225px;
-    background-color: aquamarine;
-    margin-bottom: 1.5%;
-    margin-top: 1.5%;
-
-}

@@ -1,23 +1,33 @@
 {% extends "base.html" %}
 
-
+{% block addcompany %}
+<a class="navbar-item button is-primary" href="{{ url_for('addcompany') }}">
+        <!-- AddCompany -->
+        Add Company
+    </a>
+    {% endblock %}
 
 
 {% block addbill %}
 {% if companycount >0 %}
 
-<a class="button is-primary" href="{{ url_for('addbill')  }}">Add Company</a>
+<a class="navbar-item button is-primary" href="{{ url_for('addbill')  }}">Add Bill</a>
 {% else %}
 {{ super() }}
 {% endif %}
 {% endblock %}
 
 
+{% block logout %}
 
+        <a class="navbar-item button is-light" href="{{ url_for('logout')  }}">
+                Logout
+            </a>
+{% endblock %}
 
 {% block content %}
 
-<div class="container text-center">
+<div class="container">
     <table class="table">
         <thead>
             <tr>
@@ -37,11 +47,8 @@
                 <td>{{ bill.duedate }}</td>
                 <td> {{ bill.amt }} </td>
                 <td>
-                    <form action="{{ url_for('editbill',billid=bill.billid) }}" method="GET">
-                        <button type="submit" class="btn custbtn-drk">Edit</button>
-
-                    </form>
-
+                    
+                    <a href="{{ url_for('editbill',billid=bill.billid) }}" class="button is-primary">Edit</a>
 
                 </td>
                 <td>
@@ -54,5 +61,5 @@
     </table>
 
 </div>
-</div>
+
 {% endblock %}

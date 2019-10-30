@@ -9,13 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css"
-        integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
-</head>
-
-<body>
-
-    <!-- Optional JavaScript -->
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css"
+        integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous"> -->
+         <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/easy-autocomplete.min.css') }}">
@@ -34,54 +30,50 @@
         crossorigin="anonymous"></script>
     <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script> -->
     <script src="{{ url_for('static',filename='js/jquery.autocomplete.js') }}"></script>
+</head>
+
+<body>
+
+   
     {% block extrascripts %}
     {% endblock %}
     <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="https://bulma.io">
-                <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
-            </a>
-
-            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
-                data-target="navbarBasicExample">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
-        </div>
+        
 
         <div id="navbarBasicExample" class="navbar-menu">
             <div class="navbar-start">
-                <a href="{{ url_for('default')  }}" class="navbar-item">
+                <a href="{{ url_for('default')  }}" class="navbar-item button is-primary">
                     Home
                 </a>
-                <div class="navbar-item">
-                    <a class="button is-light" href="{{ url_for('logout')  }}">
-
-                    </a>
-                </div>
-                <div class="navbar-item">
+                
+                
                     <!-- Addbill -->
                     {% block addbill %}
 
                     {% endblock %}
-                </div>
-                <div class="navbar-item">
-                    <a class="button is-primary">
-                        <!-- AddCompany -->
-
-                    </a>
-                </div>
-                <div class="navbar-item">
-                    <a class="button is-primary" href="{{ url_for('managesettings')  }}">
-
-                        <!-- Settings -->
-                    </a>
-                </div>
-
-
-
+               
+                    {% block addcompany %}
+                    
+                    {% endblock %}
+                    {% block settings %}
+                    <a class="navbar-item button is-primary" href="{{ url_for('managesettings')  }}">
+                            Settings
+                            <!-- Settings -->
+                        </a>
+                    {% endblock %}
+                            
+                    {% block logout %}
+                
+                    {% endblock %}  
             </div>
+                
+            
+                
+            </div>
+
+
+
+        
     </nav>
 
 
@@ -97,7 +89,7 @@
 
     {% endblock %}
 
-    </div>
+    
 
 </body>
 
