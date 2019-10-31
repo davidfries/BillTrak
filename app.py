@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, redirect, flash, session, abort,jsonify
 from flask_mail import Mail,Message
+from werkzeug.middleware.proxy_fix import ProxyFix
 from backend import BTBackend as BTBackend
 import datetime
 import os
@@ -13,13 +14,13 @@ app.config['MAIL_USERNAME']='admin'
 app.config['PASSWORD']=''
 app.config['MAIL_DEFAULT_SENDER']='notification@billtrak.io'
 mail=Mail(app)
-
-@app.before_request
-def before_request():
-    if not request.is_secure:
-        url = request.url.replace("http://", "https://", 1)
-        # code = 301
-        return redirect(url)
+app.wsgi_app=ProxyFix(app.wsgi_app,num_proxies=0,x_proto=1)
+# @app.before_request
+# def before_request():
+#     if not request.is_secure:
+#         url = request.url.replace("http://", "https://", 1)
+#         # code = 301
+#         return redirect(url)
 
 
 @app.route('/')
