@@ -44,7 +44,9 @@ class BTBackend():
         self.db.query(query, companyid=companyid, companyname=companyname,
                       datecreated=datecreated, category=category, userid=userid)
     def getbilldata(self,userid):
-        query="select * from billdatabyuserid WHERE userid=:userid AND date_trunc('month', duedate) = date_trunc('month', current_date)"
+        # REMOVED FROM QUERY FOR TESTING
+        # AND date_trunc('month', duedate) = date_trunc('month', current_date) 
+        query="select * from billdatabyuserid WHERE userid=:userid"
         rows = self.db.query(query,userid=userid)
         return rows.all()
     def getbillsbycompany(self, companyid,companyname):
