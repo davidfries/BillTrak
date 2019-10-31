@@ -10,8 +10,8 @@ class BTBackend():
     try:
         db = records.Database(
             f"postgresql://192.168.5.172/billtrak?user=dj&password={secrets.dbpw}")
-    except:
-        print("error in db connection")
+    except Exception as e:
+        print("error in db connection {}".format(e))
 
     def genintid(self):
         return random.getrandbits(30)
