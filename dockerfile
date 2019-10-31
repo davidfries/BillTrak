@@ -1,9 +1,9 @@
-FROM ubuntu:18.10
+FROM frolvlad/alpine-python3
 
 
 
-RUN apt-get update
-RUN apt-get install -y python3 python3-dev python3-pip nginx
+# RUN apt-get update
+# RUN apt-get install -y python3 python3-dev python3-pip nginx
 # We copy just the requirements.txt first to leverage Docker cache
 COPY ./requirements.txt /app/requirements.txt
 
@@ -14,4 +14,5 @@ RUN pip3 install gunicorn
 COPY . /app
 
 ENTRYPOINT [ "python3" ]
+CMD ["app.py","-u"]
 
