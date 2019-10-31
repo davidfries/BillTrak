@@ -14,7 +14,7 @@ app.config['MAIL_USERNAME']='admin'
 app.config['PASSWORD']=''
 app.config['MAIL_DEFAULT_SENDER']='notification@billtrak.io'
 mail=Mail(app)
-app.wsgi_app=ProxyFix(app.wsgi_app,num_proxies=0,x_proto=1)
+app.wsgi_app=ProxyFix(app.wsgi_app,x_host=1,x_proto=1)
 # @app.before_request
 # def before_request():
 #     if not request.is_secure:
