@@ -36,8 +36,8 @@ class BTBackend():
         try:
             
             self.db.query(query,userid=userid,password=password,email=email)
-        except:
-            print("creaqte user error")
+        except Exception as e:
+            print("create user error {}".format(e))
     def createcompany(self, companyname, datecreated, userid,  category=None):
         companyid=self.genintid()
         query = "INSERT INTO company(companyid,companyname,datecreated,userid,category) VALUES(:companyid,:companyname,:datecreated,:userid,:category)"
