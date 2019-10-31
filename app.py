@@ -82,6 +82,15 @@ def editbill(billid):
         bill=BTBackend().getbillinfo(billid)
         return render_template('edit.html',bill=bill)
 
+@app.route('/delete/<billid>', methods=['POST'])
+def deletebill(billid):
+    if request.method=='POST':
+        BTBackend().deletebill(billid)
+        return redirect('/bills/'+session['username'])
+    else:
+        #if the delete bill method isn't post, redirect to bills page
+        return redirect('/bills/'+session['username'])
+
 @app.route('/register',methods=['GET','POST'])
 def registeruser():
     if request.method=='POST':

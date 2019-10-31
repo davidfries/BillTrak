@@ -56,6 +56,12 @@
                 <td>
                     <div id="paidswitch"></div>
                 </td>
+                <td>
+                    <form method="POST" action="{{ url_for('deletebill',billid=bill.billid) }}">
+                        <button class="delete"></button>
+                    </form>
+
+                </td>
                 <!-- TODO^^^ -->
             </tr>
             {% endfor %}
