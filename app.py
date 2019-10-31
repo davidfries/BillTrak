@@ -61,7 +61,7 @@ def logout():
 @app.route('/edit/<billid>', methods=['GET','POST'])
 def editbill(billid):
     if request.method=='POST':
-        BTBackend().editbills(billid,request.form['billamt'],request.form['duedate'],request.form['billtel'],request.form['billurl'])
+        BTBackend().editbills(billid,request.form['billamt'],request.form['duedate'],request.form['billtel'],request.form['billurl'],request.form['confirmationnum'])
         return redirect('/bills/'+session['username'])
     else:
         bill=BTBackend().getbillinfo(billid)

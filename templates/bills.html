@@ -27,8 +27,10 @@
 
 {% block content %}
 
-<div class="container">
-    <table class="table">
+<div class="columns">
+        <div class="column custcolumn" id="leftcolumn"></div>
+    <div class="column is-half">
+    <table class="table is-hoverable">
         <thead>
             <tr>
                 <th>Company</th>
@@ -59,7 +61,9 @@
             {% endfor %}
         </tbody>
     </table>
-
+    <!-- half-size column end -->
+    </div>
+    <div class="column custcolumn" id="rightcolumn"></div>
 </div>
 
 {% endblock %}
