@@ -1,6 +1,5 @@
 from flask import Flask, request, render_template, redirect, flash, session, abort,jsonify
 from flask_mail import Mail,Message
-from flask_talisman import Talisman
 from backend import BTBackend as BTBackend
 import datetime
 import os
@@ -13,8 +12,15 @@ app.config['MAIL_USE_SSL']='True'
 app.config['MAIL_USERNAME']='admin'
 app.config['PASSWORD']=''
 app.config['MAIL_DEFAULT_SENDER']='notification@billtrak.io'
-Talisman(app,content_security_policy=None)
 mail=Mail(app)
+
+@app.before_request
+def before_request():
+    if not request.is_secure:
+        url = request.url.replace("http://", "https://", 1)
+        code = 301
+        return redirect(url, code=code)
+
 
 @app.route('/')
 def default():
