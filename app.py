@@ -30,7 +30,7 @@ def billapp(username):
             billdata = BTBackend().getbilldata(str(username))
             compdata=BTBackend().getcompanynames(str(username))
             companycount= BTBackend().getcompanycount(username)
-            print(companycount)
+            # print(companycount)
             return render_template('bills.html', billdata=billdata,userid=username,data=compdata, companycount=companycount)
         else:
             return redirect('/')
@@ -56,6 +56,7 @@ def userlogin():
 @app.route('/logout')
 def logout():
     session['logged_in']=False
+    session['username']=''
     return redirect('/')
 
 @app.route('/edit/<billid>', methods=['GET','POST'])
@@ -78,7 +79,7 @@ def registeruser():
 
 @app.route('/settings',methods=['GET','POST'])
 def managesettings():
-    pass
+    return render_template('settings.html')
 @app.route('/sendmail',methods=['POST'])
 def sendnotifications():
     
@@ -115,7 +116,7 @@ def addbill():
     try:
         userid=session['username']
     except:
-        print('error in username')
+        return redirect('/')
     if request.method == 'POST':
         try:
             BTBackend().createbill(BTBackend().gencharid(), request.form['billamt'], userid=userid, companyname=request.form['companyname'],
@@ -130,7 +131,10 @@ def addbill():
        return render_template('newbill.html',data=data,userid=userid)
 @app.route('/addcompany',methods=['GET','POST'])
 def addcompany():
-    userid=session['username']
+    try:
+        userid=session['username']
+    except:
+        return redirect('/')
     if request.method == 'POST':
         try:
             current_time=datetime.datetime.now()
