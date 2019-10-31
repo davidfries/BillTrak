@@ -1,19 +1,25 @@
 from flask import Flask, request, render_template, redirect, flash, session, abort,jsonify
 from flask_mail import Mail,Message
+from flask_session import Session
+from redis import Redis
 from werkzeug.middleware.proxy_fix import ProxyFix
 from backend import BTBackend as BTBackend
 import datetime
 import os
 from secrets import secrets as secrets
 app = Flask(__name__)
-app.secret_key = os.urandom(12)
+# app.secret_key = os.urandom(12)
 app.config['MAIL_SERVER']='mail.billtrak.io'
 app.config['MAIL_PORT']='587'
 app.config['MAIL_USE_SSL']='True'
 app.config['MAIL_USERNAME']='admin'
 app.config['PASSWORD']=''
 app.config['MAIL_DEFAULT_SENDER']='notification@billtrak.io'
+app.config['SESSION_TYPE']='redis'
+app.config['SESSION_REDIS']=Redis('192.168.5.75')
+app.config['SECRET_KEY'] = secrets.sessionkey
 mail=Mail(app)
+Session().init_app(app)
 app.wsgi_app=ProxyFix(app.wsgi_app,x_host=1,x_proto=1)
 # @app.before_request
 # def before_request():
