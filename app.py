@@ -70,7 +70,7 @@ def userlogin():
 @app.route('/logout')
 def logout():
     session['logged_in']=False
-    session['username']=''
+    session.pop('username',None)
     return redirect('/')
 
 @app.route('/edit/<billid>', methods=['GET','POST'])
