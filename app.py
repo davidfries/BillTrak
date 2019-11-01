@@ -7,13 +7,15 @@ from backend import BTBackend as BTBackend
 import datetime
 import os
 from secrets import secrets as secrets
+from scheduler import EmailScheduler
+import requests
 app = Flask(__name__)
 # app.secret_key = os.urandom(12)
-app.config['MAIL_SERVER']='mail.billtrak.io'
-app.config['MAIL_PORT']='587'
+app.config['MAIL_SERVER']='smtp.sendgrid.net'
+app.config['MAIL_PORT']='465'
 app.config['MAIL_USE_SSL']='True'
-app.config['MAIL_USERNAME']='admin'
-app.config['PASSWORD']=''
+app.config['MAIL_USERNAME']='apikey'
+app.config['PASSWORD']='{}'.format(secrets.emailapikey)
 app.config['MAIL_DEFAULT_SENDER']='notification@billtrak.io'
 app.config['SESSION_TYPE']='redis'
 app.config['SESSION_REDIS']=Redis('192.168.5.75')
@@ -106,7 +108,7 @@ def managesettings():
 @app.route('/sendmail',methods=['POST'])
 def sendnotifications():
     
-    if request.args.get('auth_token')==str(f'{secrets.emailkey}'): #checks if auth token equals what is set here
+    if request.args.get('auth_token')==str(f'{secrets.emailkey}' and request.method == 'POST'): #checks if auth token equals what is set here
         print('notif method works as intended')
         users=BTBackend().getnotifications()
         with mail.connect() as conn:
@@ -169,14 +171,28 @@ def addcompany():
     else:
        return render_template('newcompany.html')
 
-# @app.route('/companies',methods=['GET','POST'])
-# def companiesjson():
-#     if(request.method=='POST'):
-#         print('postedcompanies')
-#     print(BTBackend().getcompanynames(session['username']))
-#     return BTBackend().getcompanynames(session['username'])#this should be JSON
+@app.route('/emailjobtrigger',methods=['POST'])
+def triggeremailjob():
+    if(request.args.get('auth_token')==secrets.emailkey):
+        schedule=EmailScheduler()
+        cron=schedule.getcron()
+        schedule.getscheduler().add_job(sendemail,cron.from_crontab('0 12 * * *'))
+        schedule.getscheduler().start()
+        print("Started email job! ADMIN OUTPUT")
+
+@app.route('/getemailjobs',methods=['GET'])
+def getemailjobs():
+    if(request.args.get('auth_token')==secrets.emailkey and request.method=='GET'):
+        schedule=EmailScheduler()
+        
+        schedule.getscheduler().start()
+        print(schedule.getscheduler().get_jobs())
+        return str(schedule.getscheduler().get_jobs())
+    else:
+        return "Stop doing that."
+def sendemail():
+    requests.post('localhost/sendmail?auth_token={}'.format(secrets.emailkey))
 if __name__ == '__main__':
-    
+       
     app.run(port='5002', host="0.0.0.0")
 
-#, ssl_context =('/var/docker-data/letsencrypt/live/billtrak.io/fullchain.pem','/var/docker-data/letsencrypt/live/billtrak.io/privkey.pem')
