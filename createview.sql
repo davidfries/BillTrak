@@ -1,5 +1,6 @@
 CREATE VIEW billdatabyuserid AS
 	 SELECT users.userid,
+   users.email
     company.companyname,
 	bills.billid,
     bills.amt,
