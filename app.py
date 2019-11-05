@@ -95,13 +95,13 @@ def editbill(billid):
         BTBackend().editbills(billid,request.form['billamt'],request.form['duedate'],request.form['billtel'],request.form['billurl'],request.form['confirmationnum'])
         return redirect('/bills/'+session['username'])
     else:
-        LOGINMESSAGEDISPLAY=False
+        
         try:
             bill=BTBackend().getbillinfo(billid,session['username'])
         except:
-            LOGINMESSAGEDISPLAY=True
-            return render_template('edit.html',bill=bill,loginmessage=LOGINMESSAGEDISPLAY)
-        return render_template('edit.html',bill=bill,loginmessage=LOGINMESSAGEDISPLAY)
+            
+            return redirect('/')
+        return render_template('edit.html',bill=bill)
 
 @app.route('/delete/<billid>', methods=['POST'])
 def deletebill(billid):
