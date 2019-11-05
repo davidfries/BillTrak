@@ -9,6 +9,8 @@ BillTrak is a simple web application for tracking your bills. It is currently un
 # To Do:
 
 1. Cashflow analysis
+
 ~~2. Bill Paid Toggle Switch w/ Front-end fancy magic~~
+
 3. Re-write with Vue and all JSON Flask API (lol)
 
