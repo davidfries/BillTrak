@@ -54,7 +54,18 @@
 
                 </td>
                 <td>
-                    <div id="paidswitch"></div>
+                    {% if bill.paid %}
+                        <div class="tags has-addons">
+                            <a href="{{ url_for('paybill',billid=bill.billid) }}" id="paidswitch" class="tag is-primary">Paid</a>
+                            </div>
+                    
+                    {% else %}
+                            <div class="tags has-addons">
+                            <a href="{{ url_for('paybill',billid=bill.billid) }}" id="paidswitch" class="tag is-danger">Unpaid</a>
+                            </div>
+                    {% endif %}
+                    
+                    
                 </td>
                 <td>
                     <form method="POST" action="{{ url_for('deletebill',billid=bill.billid) }}">

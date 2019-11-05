@@ -35,6 +35,9 @@ app.wsgi_app=ProxyFix(app.wsgi_app,x_host=1,x_proto=1)
 def default():
     return render_template('index.html')
 
+@app.route('/paybill/<billid>')
+def paybill(billid):
+    return redirect('/bills/'+session['username'])
 
 @app.route('/bills/<username>', methods=['GET', 'POST'])
 def billapp(username):
