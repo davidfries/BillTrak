@@ -37,24 +37,28 @@ def default():
 
 @app.route('/paybill/<billid>')
 def paybill(billid):
+    BTBackend().paybill(billid)
     return redirect('/bills/'+session['username'])
 
 @app.route('/bills/<username>', methods=['GET', 'POST'])
 def billapp(username):
     
     
-    
-    try:
-        if session['logged_in'] and session['username']==username: #checks if the user is marked as logged in and if the username requested in url matches that token
-            billdata = BTBackend().getbilldata(str(username))
-            compdata=BTBackend().getcompanynames(str(username))
-            companycount= BTBackend().getcompanycount(username)
-            # print(companycount)
-            return render_template('bills.html', billdata=billdata,userid=username,data=compdata, companycount=companycount)
-        else:
+    if(request.method =='GET'):
+        try:
+            if session['logged_in'] and session['username']==username: #checks if the user is marked as logged in and if the username requested in url matches that token
+                billdata = BTBackend().getbilldata(str(username))
+                compdata=BTBackend().getcompanynames(str(username))
+                companycount= BTBackend().getcompanycount(username)
+                print(billdata[0].paid)
+                # print(companycount)
+                return render_template('bills.html', billdata=billdata,userid=username,data=compdata, companycount=companycount)
+            else:
+                return redirect('/')
+        except Exception as err:
+            print(err)
             return redirect('/')
-    except Exception as err:
-        print(err)
+    else:
         return redirect('/')
 
 @app.route('/login', methods=['GET','POST'])
@@ -80,12 +84,18 @@ def logout():
 
 @app.route('/edit/<billid>', methods=['GET','POST'])
 def editbill(billid):
+    
     if request.method=='POST':
         BTBackend().editbills(billid,request.form['billamt'],request.form['duedate'],request.form['billtel'],request.form['billurl'],request.form['confirmationnum'])
         return redirect('/bills/'+session['username'])
     else:
-        bill=BTBackend().getbillinfo(billid)
-        return render_template('edit.html',bill=bill)
+        LOGINMESSAGEDISPLAY=False
+        try:
+            bill=BTBackend().getbillinfo(billid,session['username'])
+        except:
+            LOGINMESSAGEDISPLAY=True
+            return render_template('edit.html',bill=bill,loginmessage=LOGINMESSAGEDISPLAY)
+        return render_template('edit.html',bill=bill,loginmessage=LOGINMESSAGEDISPLAY)
 
 @app.route('/delete/<billid>', methods=['POST'])
 def deletebill(billid):

@@ -46,7 +46,7 @@ class BTBackend():
     def getbilldata(self,userid):
         # REMOVED FROM QUERY FOR TESTING
         # AND date_trunc('month', duedate) = date_trunc('month', current_date) 
-        query="select * from billdatabyuserid WHERE userid=:userid"
+        query="select * from billdatabyuserid WHERE userid=:userid order by paid"
         rows = self.db.query(query,userid=userid)
         return rows.all()
     def getbillsbycompany(self, companyid,companyname):
@@ -55,10 +55,10 @@ class BTBackend():
         rows = self.db.query(query, companyid=self.getcompanyidbyname(companyname))
         return rows.all()
 
-    def getbillinfo(self, billid):
-        query = "select * from billdatabyuserid WHERE billid=:billid"
+    def getbillinfo(self, billid,userid):
+        query = "select * from billdatabyuserid WHERE billid=:billid and userid=:userid"
 
-        rows = self.db.query(query, billid=billid).first()
+        rows = self.db.query(query, billid=billid,userid=userid).first()
         return rows
 
     def getcompanyidsbyuserid(self, userid):
@@ -153,3 +153,10 @@ class BTBackend():
 
     
 
+    def paybill(self,billid):
+        query="""
+        update bills set paid = not coalesce(paid, 'f') where billid=:billid
+        
+        
+        """
+        return self.db.query(query,billid=str(billid))
