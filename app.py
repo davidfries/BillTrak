@@ -32,7 +32,11 @@ app.wsgi_app=ProxyFix(app.wsgi_app,x_host=1,x_proto=1)
 
 @app.context_processor
 def inject_user():
-    return dict(username=session['username'])
+    try:
+        userid=session['username']
+    except:
+        userid=""
+    return dict(username=userid)
 @app.route('/')
 def default():
     return render_template('index.html')
