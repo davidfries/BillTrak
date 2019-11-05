@@ -30,7 +30,9 @@ app.wsgi_app=ProxyFix(app.wsgi_app,x_host=1,x_proto=1)
 #         # code = 301
 #         return redirect(url)
 
-
+@app.context_processor
+def inject_user():
+    return dict(username=session['username'])
 @app.route('/')
 def default():
     return render_template('index.html')

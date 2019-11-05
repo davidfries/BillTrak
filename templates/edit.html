@@ -14,39 +14,62 @@
 
 
 {% block content %}
-<form action="" method="POST" role="form">
-    <div class="form-group">
-      <label for=""></label>
-      
-        <input type="date"
-        class="form-control" name="duedate" id="duedate" aria-describedby="helpId" placeholder="Due Date" value="{{ bill.duedate }}">
-        <!-- Replace the above with jquery date picker -->
-        <input type="text"
-        class="form-control" name="billamt" id="billamt" aria-describedby="helpId" placeholder="$50.45 - Amount" value="{{ bill.amt }}">
-        <input type="url"
-        class="form-control" name="billurl" id="billurl" aria-describedby="helpId" placeholder="https://paymybill.com" value="{{ bill.paymenturl }}">
-        <input type="tel"
-        class="form-control" name="billtel" id="billtel" aria-describedby="helpId" placeholder="555-555-5555" value="{{ bill.phonenum }}">
-        <input type="text"
-            class="form-control" name="confirmationnum" id="confirmationnum" aria-describedby="helpId" placeholder="XJF-111-222" value="{{ bill.confirmationnum }}">
-
-        <label for='recurring'>Recurring Bill?</label><br>
-        {% if bill.recurring %}
-        <input type="radio" name="recurring" value="true" checked> Yes<br>
-        <input type="radio" name="recurring" value="false"> No<br>
-        {% else %}
-            <input type="radio" name="recurring" value="true" > Yes<br>
-            <input type="radio" name="recurring" value="false" checked> No<br>
-        {% endif %}
-      
-        <button type="submit" class="btn btn-primary">Save</button>
-        
-        
-    </div>
+<section class="hero is-light is-fullheight">
+<div class="hero-body">
+        <div class="container has-text-centered">
+                <form action="" method="POST" role="form">
+                        <div class="form-group">
+                                <div class="field">
+                                <p class="control">
+                                <input type="date"
+                                class="input" name="duedate" id="duedate" aria-describedby="helpId" placeholder="Due Date" value="{{ bill.duedate }}">
+                                </p>
+                                </div>
+                                
+                                <div class="field"><p class="control"><input type="text"
+                                    class="input" name="billamt" id="billamt" aria-describedby="helpId" placeholder="$50.45 - Amount" value="{{ bill.amt }}"></p></div>
+                                
+                                <div class="field"><p class="control"><input type="url"
+                                    class="input" name="billurl" id="billurl" aria-describedby="helpId" placeholder="https://paymybill.com" value="{{ bill.paymenturl }}"></p></div>
+                                
+                                <div class="field"><p class="control"><input type="tel"
+                                    class="input" name="billtel" id="billtel" aria-describedby="helpId" placeholder="555-555-5555" value="{{ bill.phonenum }}"></p></div>
+                                
+                                <div class="field"><p class="control"><input type="text"
+                                    class="input" name="confirmationnum" id="confirmationnum" aria-describedby="helpId" placeholder="XPF-111-222" value="{{ bill.confirmationnum }}"></p></div>
+                                
+                    
+                                <div class="field"><p class="control"> <label class="label" for='recurring'>Recurring Bill?</label><br>
+                                    <label for='recurring'>Recurring Bill?</label><br>
+                                    {% if bill.recurring %}
+                                    <input type="radio" name="recurring" value="true" checked> Yes<br>
+                                    <input type="radio" name="recurring" value="false"> No<br></p></div>
+                                    {% else %}
+                                    <input type="radio" name="recurring" value="true" > Yes<br>
+                                    <input type="radio" name="recurring" value="false"checked> No<br></p></div>
+                                    {% endif %}
+                            
+                           
+                            
+                          
+                            <button type="submit" class="button is-info">Save</button>
+                            
+                            
+                        
+                    
+                    
+                        
+                    </form>
+            
+            
+            
+        </div>
+      </div>
+    </section>
 
 
     
 </form>
-
+</div>
 
 {% endblock %}

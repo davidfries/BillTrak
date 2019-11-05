@@ -8,49 +8,60 @@
 
 {% block content %}
 <div class="container has-text-centered">
-<form action="" method="POST" role="form">
-        <div class="form-group">
-          <label for=""></label>
-          <div class="control">
-            <select name="companyname" class="input" id="companies">
-                {% for company in data %}
-                    <option>{{company.name}}</option>
-                {% endfor %}
-            </select>
-        </div>
-            <div class="field">
-            <p class="control">
-            <input type="date"
-            class="input" name="duedate" id="duedate" aria-describedby="helpId" placeholder="Due Date">
-            </p>
-            </div>
-            <!-- Replace the above with jquery date picker -->
-            <div class="field"><p class="control"><input type="text"
-                class="input" name="billamt" id="billamt" aria-describedby="helpId" placeholder="$50.45 - Amount"></p></div>
-            
-            <div class="field"><p class="control"><input type="url"
-                class="input" name="billurl" id="billurl" aria-describedby="helpId" placeholder="https://paymybill.com"></p></div>
-            
-            <div class="field"><p class="control"><input type="tel"
-                class="input" name="billtel" id="billtel" aria-describedby="helpId" placeholder="555-555-5555"></p></div>
-            
-            <div class="field"><p class="control"><input type="text"
-                class="input" name="confirmationnum" id="confirmationnum" aria-describedby="helpId" placeholder="XPF-111-222"></p></div>
-            
+<section class="hero is-light is-fullheight">
+        <div class="hero-body">
+                <div class="container has-text-centered">
+                        <form action="" method="POST" role="form">
+                                <div class="form-group">
+                                  <label for=""></label>
+                                  <div class="control">
+                                    <select name="companyname" class="input" id="companies">
+                                        {% for company in data %}
+                                            <option>{{company.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                    <div class="field">
+                                    <p class="control">
+                                    <input type="date"
+                                    class="input" name="duedate" id="duedate" aria-describedby="helpId" placeholder="Due Date">
+                                    </p>
+                                    </div>
+                                    <!-- Replace the above with jquery date picker -->
+                                    <div class="field"><p class="control"><input type="text"
+                                        class="input" name="billamt" id="billamt" aria-describedby="helpId" placeholder="$50.45 - Amount"></p></div>
+                                    
+                                    <div class="field"><p class="control"><input type="url"
+                                        class="input" name="billurl" id="billurl" aria-describedby="helpId" placeholder="https://paymybill.com"></p></div>
+                                    
+                                    <div class="field"><p class="control"><input type="tel"
+                                        class="input" name="billtel" id="billtel" aria-describedby="helpId" placeholder="555-555-5555"></p></div>
+                                    
+                                    <div class="field"><p class="control"><input type="text"
+                                        class="input" name="confirmationnum" id="confirmationnum" aria-describedby="helpId" placeholder="XPF-111-222"></p></div>
+                                    
+                        
+                                    <div class="field"><p class="control"> <label class="label" for='recurring'>Recurring Bill?</label><br>
+                                        <input type="radio" name="recurring" value="true" checked> Yes<br>
+                                        <input type="radio" name="recurring" value="false"> No<br></p></div>
+                                   
+                                    
+                                </div>
+                            
+                            
+                                   
+                                <button type="submit" class="button is-info">Save</button>
+                            
+                            </form>
 
-            <div class="field"><p class="control"> <label class="label" for='recurring'>Recurring Bill?</label><br>
-                <input type="radio" name="recurring" value="true" checked> Yes<br>
-                <input type="radio" name="recurring" value="false"> No<br></p></div>
-           
-            
+
+                </div>
         </div>
-    
-    
-           
-        <button type="submit" class="button is-info">Save</button>
-    
-    </form>
-</div>
+        </section>
+
+
+    </div>
+
     <!-- ends content -->
     {% endblock %}
 

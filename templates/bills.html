@@ -18,69 +18,74 @@
 {% endblock %}
 
 
-{% block logout %}
 
-        <a class="navbar-item button is-light" href="{{ url_for('logout')  }}">
-                Logout
-            </a>
-{% endblock %}
 
 {% block content %}
-
-<div class="columns" id="maincolumns">
-        <div class="column custcolumn" id="leftcolumn"></div>
-    <div class="column is-half">
-    <table class="table is-hoverable">
-        <thead>
-            <tr>
-                <th>Company</th>
-                <th>Due Date</th>
-                <th>Amount</th>
-                <th>Edit</th>
-                <th>Paid?</th>
-
-            </tr>
-        </thead>
-        {% for bill in billdata %}
-        <tbody>
-            <tr>
-
-                <td> {{ bill.companyname }} </td>
-                <td>{{ bill.duedate }}</td>
-                <td> {{ bill.amt }} </td>
-                <td>
-                    
-                    <a href="{{ url_for('editbill',billid=bill.billid) }}" class="button is-primary">Edit</a>
-
-                </td>
-                <td>
-                    {% if bill.paid %}
-                        <div class="tags has-addons">
-                            <a href="{{ url_for('paybill',billid=bill.billid) }}" id="paidswitch" class="tag is-primary">Paid</a>
+<section class="hero is-light is-fullheight">
+        <div class="hero-body">
+                <div class="container has-text-centered">
+                        <div class="columns" id="maincolumns">
+                                <div class="column custcolumn" id="leftcolumn"></div>
+                            <div class="column is-half">
+                            <table class="table is-hoverable">
+                                <thead>
+                                    <tr>
+                                        <th>Company</th>
+                                        <th>Due Date</th>
+                                        <th>Amount</th>
+                                        <th>Edit</th>
+                                        <th>Paid?</th>
+                        
+                                    </tr>
+                                </thead>
+                                {% for bill in billdata %}
+                                <tbody>
+                                    <tr>
+                        
+                                        <td> {{ bill.companyname }} </td>
+                                        <td>{{ bill.duedate }}</td>
+                                        <td> {{ bill.amt }} </td>
+                                        <td>
+                                            
+                                            <a href="{{ url_for('editbill',billid=bill.billid) }}" class="button is-primary">Edit</a>
+                        
+                                        </td>
+                                        <td>
+                                            {% if bill.paid %}
+                                                <div class="tags has-addons">
+                                                    <a href="{{ url_for('paybill',billid=bill.billid) }}" id="paidswitch" class="tag is-primary">Paid</a>
+                                                    </div>
+                                            
+                                            {% else %}
+                                                    <div class="tags has-addons">
+                                                    <a href="{{ url_for('paybill',billid=bill.billid) }}" id="paidswitch" class="tag is-danger">Unpaid</a>
+                                                    </div>
+                                            {% endif %}
+                                            
+                                            
+                                        </td>
+                                        <td>
+                                            <form method="POST" action="{{ url_for('deletebill',billid=bill.billid) }}">
+                                                <button class="delete"></button>
+                                            </form>
+                        
+                                        </td>
+                                        <!-- TODO^^^ -->
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <!-- half-size column end -->
                             </div>
-                    
-                    {% else %}
-                            <div class="tags has-addons">
-                            <a href="{{ url_for('paybill',billid=bill.billid) }}" id="paidswitch" class="tag is-danger">Unpaid</a>
-                            </div>
-                    {% endif %}
-                    
-                    
-                </td>
-                <td>
-                    <form method="POST" action="{{ url_for('deletebill',billid=bill.billid) }}">
-                        <button class="delete"></button>
-                    </form>
+                            <div class="column custcolumn" id="rightcolumn"></div>
+                        </div>
 
-                </td>
-                <!-- TODO^^^ -->
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <!-- half-size column end -->
-    </div>
-    <div class="column custcolumn" id="rightcolumn"></div>
-</div>
+
+                </div>
+        </div>
+
+
+
+
 
 {% endblock %}

@@ -5,24 +5,31 @@
 
 
 {% block content %}
-<div class="container has-text-centered">
-<form action="" method="POST" role="form">
-        <div class="form-group">
-          
-            
-            
-        
-        <div class="field">
-          <p class="control">
-          <input type="text"
-          class="input" name="companyname" id="companyname" aria-describedby="helpId" placeholder="Company Name">
-          </p>
-          </div>
-    
-        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-        <button type="submit" class="button is-info">Save</button>
-      </div>
-    </form>
-  </div>
+<section class="hero is-light is-fullheight">
+    <div class="hero-body">
+            <div class="container has-text-centered">
+                <form action="" method="POST" role="form">
+                    <div class="form-group">
+                      
+                        
+                        
+                    
+                    <div class="field">
+                      <p class="control">
+                      <input type="text"
+                      class="input" name="companyname" id="companyname" aria-describedby="helpId" placeholder="Company Name">
+                      </p>
+                      </div>
+                
+                    <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                    <button type="submit" class="button is-info">Save</button>
+                  </div>
+                </form>
+
+
+            </div>
+    </div>
+    </section>
+
     <!-- ends content -->
     {% endblock %}
