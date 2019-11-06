@@ -8,6 +8,8 @@ import datetime
 import os
 from secrets import secrets as secrets
 from scheduler import EmailScheduler
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 import requests
 app = Flask(__name__)
 # app.secret_key = os.urandom(12)
@@ -127,10 +129,11 @@ def managesettings():
 @app.route('/sendmail',methods=['POST'])
 def sendnotifications():
     
-    if request.args.get('auth_token')==str(f'{secrets.emailkey}' and request.method == 'POST'): #checks if auth token equals what is set here
+    if request.args.get('auth_token')==secrets.emailkey and request.method == 'POST': #checks if auth token equals what is set here
         print('notif method works as intended')
         users=BTBackend().getnotifications()
-        with mail.connect() as conn:
+        try:
+            
             for user in users:
                 message = """
                 Hello,
@@ -144,13 +147,20 @@ def sendnotifications():
 
                 
                 
-                """.format(companyname=user.companyname,duedate=user.duedate,paymenturl=user.paymenturl,phonenum=user.phonenum)
+                """.format(companyname=user.companyname,duedate=user.duedate,paymenturl=user.paymenturl,phonenum=user.phonenum,amt=user.amt)
                 subject = "BillDue Notification"
-                msg = Message(recipients=[BTBackend().getemailbyuserid(user.userid)],
-                            body=message,
+                msg = Mail(to_emails=user.email,
+                            from_email='notification@billtrak.io',
+                            html_content=message,
                             subject=subject)
-
-                conn.send(msg)
+                print("sending message {}".format(user))
+                sg = SendGridAPIClient(secrets.emailapikey)
+                response=sg.send(msg)
+                print("Status Code: {} Body: {} Headers: {}".format(response.status_code,response.body,response.headers))
+                    
+        except Exception as e:
+            print("Exception in email send: {}".format(e))
+            return '<h1>error in email send</h1>'
         return '<h1>Notifications sent!</h1>'
     else:
         print('didn"t work with toekn')
@@ -205,12 +215,12 @@ def getemailjobs():
         schedule=EmailScheduler()
         
         schedule.getscheduler().start()
-        print(schedule.getscheduler().get_jobs())
+        print(schedule.getscheduler().get_jobs()[0])
         return str(schedule.getscheduler().get_jobs())
     else:
         return "Stop doing that."
 def sendemail():
-    requests.post('localhost/sendmail?auth_token={}'.format(secrets.emailkey))
+    requests.post('http://localhost:5002/sendmail?auth_token={}'.format(secrets.emailkey))
 if __name__ == '__main__':
        
     app.run(port='5002', host="0.0.0.0")

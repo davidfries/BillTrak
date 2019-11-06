@@ -10,3 +10,4 @@ records==0.5.2
 redis==3.3.11
 Flask-Session==0.3.1
 APScheduler==3.6.1
+sendgrid==6.1.0

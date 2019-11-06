@@ -144,7 +144,7 @@ class BTBackend():
         
     def getnotifications(self):
         query=""" 
-        select * from notificationall WHERE duedate = current_date + interval '3 day'
+        select * from notificationall WHERE duedate > now() - interval '3 day'
         
         """
         rows=self.db.query(query).all()
