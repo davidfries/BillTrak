@@ -55,10 +55,10 @@ def billapp(username):
     if(request.method =='GET'):
         try:
             if session['logged_in'] and session['username']==username: #checks if the user is marked as logged in and if the username requested in url matches that token
-                billdata = BTBackend().getbilldata(str(username))
-                compdata=BTBackend().getcompanynames(str(username))
-                companycount= BTBackend().getcompanycount(username)
-                print(billdata[0].paid)
+                billdata = BTBackend().getbilldata(str(session['username']))
+                compdata=BTBackend().getcompanynames(str(session['username']))
+                companycount= BTBackend().getcompanycount(session['username'])
+                # print(billdata[0].paid)
                 # print(companycount)
                 return render_template('bills.html', billdata=billdata,userid=username,data=compdata, companycount=companycount)
             else:
