@@ -180,6 +180,8 @@ def addbill():
             return redirect(url)
         except Exception as err:
             print(err)
+            url = "/bills/"+userid
+            return redirect(url)
     else:
        data=BTBackend().getcompanynames(session['username'])
        return render_template('newbill.html',data=data,userid=userid)
