@@ -4,10 +4,10 @@ from apscheduler.triggers import cron
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from apscheduler.executors.pool import ProcessPoolExecutor
-
+import os
 class EmailScheduler():
     jobstores = {
-        'default':SQLAlchemyJobStore(f'postgresql://192.168.5.172/billtrak?user=dj&password={secrets.dbpw}')
+        'default':SQLAlchemyJobStore(f'postgresql://192.168.5.172/billtrak?user=dj&password={os.getenv("dbpw")}')
     }
     executors = {
     'default': {'type': 'threadpool', 'max_workers': 20},
