@@ -67,6 +67,12 @@
                             <!-- Settings -->
                         </a>
                     {% endblock %}
+                    {% block cashflow %}
+                    <a class="navbar-item button is-primary" href="{{ url_for('managecashflow')  }}">
+                        Cashflow
+                        <!-- Settings -->
+                    </a>
+                    {% endblock %}
                             
                     {% block logout %}
                     <a class="navbar-item button is-info" href="{{ url_for('logout')  }}">

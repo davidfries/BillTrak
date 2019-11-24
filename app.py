@@ -47,6 +47,40 @@ def default():
 def paybill(billid):
     BTBackend().paybill(billid)
     return redirect('/bills/'+session['username'])
+def aggregatebillamts(bills):
+    total=0
+    try:
+        for bill in bills:
+            total+=int(bill.sum)
+    except Exception as e:
+        print(e)
+    return total
+@app.route('/bills/managecashflow/',methods=['GET','POST'])
+def managecashflow():
+    if(request.method=='GET'):
+        try:
+            userid=session['username']
+        except:
+            return redirect('login.html')
+        try:
+            data=BTBackend().getcompanyamts(userid)
+            total=aggregatebillamts(data)
+            percentage = int((total/data[0].monthlyincome)*100)
+        except Exception as e:
+            print(e)
+            return redirect('/bills/'+session['username'])
+        return render_template('cashflow.html',data=data,percentage=percentage)
+    if(request.method=='POST'):
+        # try:
+        BTBackend().addmonthlyincome(session['username'],request.form['monthlyincome'])
+        
+        data=BTBackend().getcompanyamts(session['username'])
+        
+            
+        return render_template('cashflow.html',data=data)
+        # except:
+        #     print("error when adding monthly incomeflask")
+        #     return re
 
 @app.route('/bills/<username>', methods=['GET', 'POST'])
 def billapp(username):

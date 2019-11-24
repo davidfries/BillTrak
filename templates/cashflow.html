@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+  <div class="notification">
+    <form method="POST">
+    <div class="field">
+      <label class="label">Monthly Income: {{data[0].monthlyincome}}</label>
+      <p class="control">
+        <input class="input" name="monthlyincome" type="text" placeholder="$100">
+      </p>
+    </div>
+    
+    
+    
+    <div class="field is-grouped">
+      <p class="control">
+        <button type="submit" class="button is-primary">Submit</button>
+      </p>
+      
+    </div>
+  </form>
+  </div>
+  <div class="notification">
+    <h1>Company Data Coming Soon!</h1>
+    <h2>Percentage of Income on current  bills: {{percentage}}%</h2>
+  </div>
+</div>
+
+{% endblock %}

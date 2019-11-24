@@ -103,7 +103,21 @@ class BTBackend():
         rows=self.db.query(query,password=password,userid=userid).all()
         print(len(rows)>0)
         return len(rows)>0
-        
+    def addmonthlyincome(self,userid,amt):
+        query="""update users set monthlyincome=:amt where userid=:userid"""
+        try:
+            self.db.query(query,amt=amt,userid=userid)
+        except Exception as e:
+            print("error in add monthly income amount "+str(e))
+    def getcompanyamts(self,userid):
+        query="""
+        select * from companyamts where userid =:userid
+        """
+        try:
+            rows=self.db.query(query,userid=userid).all()
+            return rows
+        except Exception as e:
+            print(e)
     def editbills(self,billid,amt,duedate,phonenum,paymenturl,confirmationnum):
         query="""UPDATE bills SET amt=:amt, duedate=:duedate,paymenturl=:paymenturl,phonenum=:phonenum, confirmationnum=:confirmationnum where billid=:billid """
         try:
