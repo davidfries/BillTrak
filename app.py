@@ -64,11 +64,15 @@ def managecashflow():
             return redirect('login.html')
         try:
             data=BTBackend().getcompanyamts(userid)
-            try:
-                total=aggregatebillamts(data)
-                percentage = int((total/data[0].monthlyincome)*100)
-            except:
-                print("error in percentage calculation for cashflow")
+            if(data[0].monthlyincome):
+                try:
+                    total=aggregatebillamts(data)
+                    percentage = int((total/data[0].monthlyincome)*100)
+                except:
+                    print("error in percentage calculation for cashflow")
+            else:
+                percentage=0
+
         except Exception as e:
             print(e)
             return redirect('/bills/'+session['username'])
