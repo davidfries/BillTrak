@@ -99,9 +99,11 @@ def billapp(username):
                 billdata = BTBackend().getbilldata(str(session['username']))
                 compdata=BTBackend().getcompanynames(str(session['username']))
                 companycount= BTBackend().getcompanycount(session['username'])
+                billcount=len(billdata)
+                print(billcount)
                 # print(billdata[0].paid)
                 # print(companycount)
-                return render_template('bills.html', billdata=billdata,userid=username,data=compdata, companycount=companycount)
+                return render_template('bills.html', billdata=billdata,userid=username,data=compdata, companycount=companycount,billcount=billcount)
             else:
                 return redirect('/')
         except Exception as err:

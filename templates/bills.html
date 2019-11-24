@@ -7,7 +7,18 @@
     </a>
     {% endblock %}
 
+{% block cashflow %}
+{% if billcount >0 %}
 
+<a class="navbar-item button is-primary" href="{{ url_for('managecashflow')  }}">
+        Cashflow
+        <!-- Settings -->
+    </a>
+
+{% else %}
+
+{% endif %}
+{% endblock %}
 {% block addbill %}
 {% if companycount >0 %}
 
