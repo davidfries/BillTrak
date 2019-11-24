@@ -6,7 +6,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from backend import BTBackend as BTBackend
 import datetime
 import os
-from secrets import secrets as secrets
+# from secrets import secrets as secrets
 from scheduler import EmailScheduler
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
