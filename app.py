@@ -64,8 +64,11 @@ def managecashflow():
             return redirect('login.html')
         try:
             data=BTBackend().getcompanyamts(userid)
-            total=aggregatebillamts(data)
-            percentage = int((total/data[0].monthlyincome)*100)
+            try:
+                total=aggregatebillamts(data)
+                percentage = int((total/data[0].monthlyincome)*100)
+            except:
+                print("error in percentage calculation for cashflow")
         except Exception as e:
             print(e)
             return redirect('/bills/'+session['username'])
@@ -74,10 +77,10 @@ def managecashflow():
         # try:
         BTBackend().addmonthlyincome(session['username'],request.form['monthlyincome'])
         
-        data=BTBackend().getcompanyamts(session['username'])
+        # data=BTBackend().getcompanyamts(session['username'])
         
             
-        return render_template('cashflow.html',data=data)
+        return redirect("/bills/managecashflow")
         # except:
         #     print("error when adding monthly incomeflask")
         #     return re
