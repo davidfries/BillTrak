@@ -206,7 +206,7 @@ def sendnotifications():
             return '<h1>error in email send</h1>'
         return '<h1>Notifications sent!</h1>'
     else:
-        print('didn"t work with toekn')
+        print('didn"t work with token')
         return '<h1>Notifications failed!</h1>'
 @app.route('/addbill',methods=['GET','POST'])
 def addbill():
