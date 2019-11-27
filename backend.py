@@ -46,7 +46,7 @@ class BTBackend():
     def getbilldata(self,userid):
         # REMOVED FROM QUERY FOR TESTING
         # AND date_trunc('month', duedate) = date_trunc('month', current_date) 
-        query="select * from billdatabyuserid WHERE userid=:userid order by paid"
+        query="select * from billdatabyuserid WHERE userid=:userid order by duedate desc"
         rows = self.db.query(query,userid=userid)
         return rows.all()
     def getbillsbycompany(self, companyid,companyname):
