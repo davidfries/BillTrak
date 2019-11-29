@@ -25,4 +25,6 @@ class EmailScheduler():
     scheduler.configure(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone=utc)
     def getscheduler(self):
         return self.scheduler
-    
+if __name__ == '__main__':
+    scheduler = EmailScheduler()
+    scheduler.getscheduler().start()

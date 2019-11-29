@@ -267,7 +267,7 @@ def getemailjobs():
 def sendemail():
     requests.post('http://localhost:5002/sendmail?auth_token={}'.format(os.getenv('emailkey')))
 if __name__ == '__main__':
-    schedule=EmailScheduler()
-    schedule.getscheduler().start()
+    # schedule=EmailScheduler()
+    # schedule.getscheduler().start()
     app.run(port='5002', host="0.0.0.0")
 
