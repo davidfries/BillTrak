@@ -6,7 +6,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from backend import BTBackend as BTBackend
 import datetime
 import os
-# from secrets import secrets as secrets
+from secrets import secrets as secrets
 from scheduler import EmailScheduler
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
@@ -20,11 +20,11 @@ app.config['MAIL_SERVER']='smtp.sendgrid.net'
 app.config['MAIL_PORT']='465'
 app.config['MAIL_USE_SSL']='True'
 app.config['MAIL_USERNAME']='apikey'
-app.config['PASSWORD']='{}'.format(os.getenv('emailapikey'))
+app.config['PASSWORD']='{}'.format(secrets.emailapikey)
 app.config['MAIL_DEFAULT_SENDER']='notification@billtrak.io'
 app.config['SESSION_TYPE']='redis'
 app.config['SESSION_REDIS']=Redis('192.168.5.75')
-app.config['SECRET_KEY'] = os.getenv('sessionkey')
+app.config['SECRET_KEY'] = secrets.sessionkey
 logger=Logger("BillTrakCore")
 logger.addHandler(LogHandler)
 logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
@@ -178,7 +178,7 @@ def managesettings():
 @app.route('/sendmail',methods=['POST'])
 def sendnotifications():
     
-    if request.args.get('auth_token')==os.getenv('emailkey') and request.method == 'POST': #checks if auth token equals what is set here
+    if request.args.get('auth_token')==secrets.emailkey and request.method == 'POST': #checks if auth token equals what is set here
         logging.info('notif method works as intended')
         users=BTBackend().getnotifications()
         try:
@@ -203,7 +203,7 @@ def sendnotifications():
                             html_content=message,
                             subject=subject)
                 logging.info("sending message {}".format(user))
-                sg = SendGridAPIClient(os.getenv('emailapikey'))
+                sg = SendGridAPIClient(secrets.emailapikey)
                 response=sg.send(msg)
                 logging.info("Status Code: {} Body: {} Headers: {}".format(response.status_code,response.body,response.headers))
                     
@@ -253,7 +253,7 @@ def addcompany():
 
 @app.route('/emailjobtrigger',methods=['POST'])
 def triggeremailjob():
-    if(request.args.get('auth_token')==os.getenv('emailkey')):
+    if(request.args.get('auth_token')==secrets.emailkey):
         schedule=EmailScheduler()
         cron=schedule.getcron()
         schedule.getscheduler().add_job(sendemail,cron.from_crontab('0 12 * * *'))
@@ -262,7 +262,7 @@ def triggeremailjob():
 
 @app.route('/getemailjobs',methods=['GET'])
 def getemailjobs():
-    if(request.args.get('auth_token')==os.getenv('emailkey') and request.method=='GET'):
+    if(request.args.get('auth_token')==secrets.emailkey and request.method=='GET'):
         schedule=EmailScheduler()
         
         schedule.getscheduler().start()
@@ -271,7 +271,7 @@ def getemailjobs():
     else:
         return "Stop doing that."
 def sendemail():
-    requests.post('http://localhost:5002/sendmail?auth_token={}'.format(os.getenv('emailkey')))
+    requests.post('http://localhost:5002/sendmail?auth_token={}'.format(secrets.emailkey))
 if __name__ == '__main__':
     # schedule=EmailScheduler()
     # schedule.getscheduler().start()
