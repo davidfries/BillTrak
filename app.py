@@ -75,7 +75,7 @@ def managecashflow():
                     total=aggregatebillamts(data)
                     percentage = int((total/data[0].monthlyincome)*100)
                 except:
-                    print("error in percentage calculation for cashflow")
+                    logging.info("error in percentage calculation for cashflow")
             else:
                 percentage=0
 
@@ -106,7 +106,7 @@ def billapp(username):
                 compdata=BTBackend().getcompanynames(str(session['username']))
                 companycount= BTBackend().getcompanycount(session['username'])
                 billcount=len(billdata)
-                print(billcount)
+                logging.info("{}'s billcount is: {}".format(username,billcount))
                 # print(billdata[0].paid)
                 # print(companycount)
                 return render_template('bills.html', billdata=billdata,userid=username,data=compdata, companycount=companycount,billcount=billcount)
@@ -179,7 +179,7 @@ def managesettings():
 def sendnotifications():
     
     if request.args.get('auth_token')==os.getenv('emailkey') and request.method == 'POST': #checks if auth token equals what is set here
-        print('notif method works as intended')
+        logging.info('notif method works as intended')
         users=BTBackend().getnotifications()
         try:
             
@@ -202,17 +202,17 @@ def sendnotifications():
                             from_email='notification@billtrak.io',
                             html_content=message,
                             subject=subject)
-                print("sending message {}".format(user))
+                logging.info("sending message {}".format(user))
                 sg = SendGridAPIClient(os.getenv('emailapikey'))
                 response=sg.send(msg)
-                print("Status Code: {} Body: {} Headers: {}".format(response.status_code,response.body,response.headers))
+                logging.info("Status Code: {} Body: {} Headers: {}".format(response.status_code,response.body,response.headers))
                     
         except Exception as e:
-            print("Exception in email send: {}".format(e))
+            logging.info("Exception in email send: {}".format(e))
             return '<h1>error in email send</h1>'
         return '<h1>Notifications sent!</h1>'
     else:
-        print('didn"t work with token')
+        logging.info('didn"t work with token')
         return '<h1>Notifications failed!</h1>'
 @app.route('/addbill',methods=['GET','POST'])
 def addbill():
@@ -258,7 +258,7 @@ def triggeremailjob():
         cron=schedule.getcron()
         schedule.getscheduler().add_job(sendemail,cron.from_crontab('0 12 * * *'))
         schedule.getscheduler().start()
-        print("Started email job! ADMIN OUTPUT")
+        logging.info("Started email job! ADMIN OUTPUT")
 
 @app.route('/getemailjobs',methods=['GET'])
 def getemailjobs():
@@ -266,7 +266,7 @@ def getemailjobs():
         schedule=EmailScheduler()
         
         schedule.getscheduler().start()
-        print(schedule.getscheduler().get_jobs()[0])
+        logging.info(schedule.getscheduler().get_jobs()[0])
         return str(schedule.getscheduler().get_jobs())
     else:
         return "Stop doing that."
