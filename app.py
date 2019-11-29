@@ -10,6 +10,9 @@ import os
 from scheduler import EmailScheduler
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
+from logging import Logger
+import logging
+from handlers import LogHandler
 import requests
 app = Flask(__name__)
 # app.secret_key = os.urandom(12)
@@ -22,6 +25,9 @@ app.config['MAIL_DEFAULT_SENDER']='notification@billtrak.io'
 app.config['SESSION_TYPE']='redis'
 app.config['SESSION_REDIS']=Redis('192.168.5.75')
 app.config['SECRET_KEY'] = os.getenv('sessionkey')
+logger=Logger("BillTrakCore")
+logger.addHandler(LogHandler)
+logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 mail=Mail(app)
 Session().init_app(app)
 app.wsgi_app=ProxyFix(app.wsgi_app,x_host=1,x_proto=1)

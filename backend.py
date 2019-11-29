@@ -147,7 +147,10 @@ class BTBackend():
         rows =self.db.query(query,companyname=companyname).first()
         
         return rows.companyid
-
+    def logevent(self,event):
+        query="""insert into logs(event) values(:event)
+        """
+        self.db.query(query,event=str(event))
     def createbill(self,  billid, amt,  duedate, recurring,userid,companyname,confirmationnum,companyid=None,datepaid=None, paymenturl=None, phonenum=None, category=None):
         query = "INSERT INTO bills(billid,companyid,amt,datepaid,confirmationnum,paymenturl,category,phonenum,recurring,duedate) VALUES(:billid,:companyid,:amt,:datepaid,:confirmationnum,:paymenturl,:category,:phonenum,:recurring,:duedate)"
         
