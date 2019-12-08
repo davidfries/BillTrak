@@ -7,10 +7,12 @@ import logging
 from logging import Logger
 from handlers import LogHandler
 import os
-
-logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 logger=Logger("BillTrak-Backend")
-logger.addHandler(LogHandler)
+logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S',
+    level=logger.info)
+
+hdlr=LogHandler()
+logger.addHandler(hdlr)
 class BTBackend():
     
     try:
