@@ -1,8 +1,24 @@
 {% extends "base.html" %}
     {% block content %}
-        <div class="container">
-            <h1>Coming soon!</h1>
-
+        <div class="tabs is-centered is-toggle">
+          <ul>
+            <li class="is-active"><a>Account</a></li>
+            <li><a>Notifications</a></li>
+            <li><a>Bill Roll-over</a></li>
+            
+          </ul>
         </div>
-
+        <div class="container">
+          <div class="notification">
+            <h1>Account Settings</h1>
+            <div class="field is-grouped">
+              <p class="control is-expanded">
+                <input class="input" type="text" placeholder="Enter new password">
+              </p>
+              <p class="control">
+                <button type="submit" class="button is-danger">Reset</button>
+              </p>
+            </div>
+          </div>
+        </div>
     {% endblock %}

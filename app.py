@@ -26,8 +26,12 @@ app.config['SESSION_TYPE']='redis'
 app.config['SESSION_REDIS']=Redis('192.168.5.75')
 app.config['SECRET_KEY'] = secrets.sessionkey
 logger=Logger("BillTrakCore")
-logger.addHandler(LogHandler)
-logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
+logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S',
+    level=logger.info)
+
+hdlr=LogHandler()
+logger.addHandler(hdlr)
+
 mail=Mail(app)
 Session().init_app(app)
 app.wsgi_app=ProxyFix(app.wsgi_app,x_host=1,x_proto=1)
@@ -75,7 +79,7 @@ def managecashflow():
                     total=aggregatebillamts(data)
                     percentage = int((total/data[0].monthlyincome)*100)
                 except:
-                    logging.info("error in percentage calculation for cashflow")
+                    logger.info("error in percentage calculation for cashflow")
             else:
                 percentage=0
 
@@ -106,7 +110,7 @@ def billapp(username):
                 compdata=BTBackend().getcompanynames(str(session['username']))
                 companycount= BTBackend().getcompanycount(session['username'])
                 billcount=len(billdata)
-                logging.info("{}'s billcount is: {}".format(username,billcount))
+                logger.info("{}'s billcount is: {}".format(username,billcount))
                 # print(billdata[0].paid)
                 # print(companycount)
                 return render_template('bills.html', billdata=billdata,userid=username,data=compdata, companycount=companycount,billcount=billcount)
@@ -179,7 +183,7 @@ def managesettings():
 def sendnotifications():
     
     if request.args.get('auth_token')==secrets.emailkey and request.method == 'POST': #checks if auth token equals what is set here
-        logging.info('notif method works as intended')
+        logger.info('notif method works as intended')
         users=BTBackend().getnotifications()
         try:
             
@@ -202,17 +206,17 @@ def sendnotifications():
                             from_email='notification@billtrak.io',
                             html_content=message,
                             subject=subject)
-                logging.info("sending message {}".format(user))
+                logger.info("sending message {}".format(user))
                 sg = SendGridAPIClient(secrets.emailapikey)
                 response=sg.send(msg)
-                logging.info("Status Code: {} Body: {} Headers: {}".format(response.status_code,response.body,response.headers))
+                logger.info("Status Code: {} Body: {} Headers: {}".format(response.status_code,response.body,response.headers))
                     
         except Exception as e:
-            logging.info("Exception in email send: {}".format(e))
+            logger.info("Exception in email send: {}".format(e))
             return '<h1>error in email send</h1>'
         return '<h1>Notifications sent!</h1>'
     else:
-        logging.info('didn"t work with token')
+        logger.info('didn"t work with token')
         return '<h1>Notifications failed!</h1>'
 @app.route('/addbill',methods=['GET','POST'])
 def addbill():
@@ -258,7 +262,7 @@ def triggeremailjob():
         cron=schedule.getcron()
         schedule.getscheduler().add_job(sendemail,cron.from_crontab('0 12 * * *'))
         schedule.getscheduler().start()
-        logging.info("Started email job! ADMIN OUTPUT")
+        logger.info("Started email job! ADMIN OUTPUT")
 
 @app.route('/getemailjobs',methods=['GET'])
 def getemailjobs():
@@ -266,7 +270,7 @@ def getemailjobs():
         schedule=EmailScheduler()
         
         schedule.getscheduler().start()
-        logging.info(schedule.getscheduler().get_jobs()[0])
+        logger.info(schedule.getscheduler().get_jobs()[0])
         return str(schedule.getscheduler().get_jobs())
     else:
         return "Stop doing that."
@@ -275,5 +279,7 @@ def sendemail():
 if __name__ == '__main__':
     # schedule=EmailScheduler()
     # schedule.getscheduler().start()
+    
+    logger.info("Starting flask server")
     app.run(port='5002', host="0.0.0.0")
 

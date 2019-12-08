@@ -3,15 +3,21 @@ import random
 import string
 import records
 from secrets import secrets as secrets
+import logging
+from logging import Logger
+from handlers import LogHandler
 import os
 
-
+logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
+logger=Logger("BillTrak-Backend")
+logger.addHandler(LogHandler)
 class BTBackend():
+    
     try:
         db = records.Database(
             f"postgresql://192.168.5.172/billtrak?user=dj&password={secrets.dbpw}")
     except Exception as e:
-        print("error in db connection {}".format(e))
+        logger.info("error in db connection {}".format(e))
 
     def genintid(self):
         return random.getrandbits(30)
@@ -123,7 +129,7 @@ class BTBackend():
         try:
             self.db.query(query,amt=amt,billid=billid,duedate=duedate,paymenturl=paymenturl,phonenum=phonenum,confirmationnum=confirmationnum)
         except Exception as e:
-            print(e)
+            logger.info(e)
 
     def updatebillamt(self,billid,amt):
         query="UPDATE bills SET amt=:amt,where billid=:billid "
@@ -147,10 +153,7 @@ class BTBackend():
         rows =self.db.query(query,companyname=companyname).first()
         
         return rows.companyid
-    def logevent(self,event):
-        query="""insert into logs(event) values(:event)
-        """
-        self.db.query(query,event=str(event))
+               
     def createbill(self,  billid, amt,  duedate, recurring,userid,companyname,confirmationnum,companyid=None,datepaid=None, paymenturl=None, phonenum=None, category=None):
         query = "INSERT INTO bills(billid,companyid,amt,datepaid,confirmationnum,paymenturl,category,phonenum,recurring,duedate) VALUES(:billid,:companyid,:amt,:datepaid,:confirmationnum,:paymenturl,:category,:phonenum,:recurring,:duedate)"
         
