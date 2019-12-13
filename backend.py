@@ -16,7 +16,7 @@ class BTBackend():
     
     try:
         db = records.Database(
-            f"postgresql://192.168.5.172/billtrak?user=dj&password={secrets.dbpw}")
+            f"postgresql://192.168.5.172/billtrak?user=dj&password={os.getenv('dbpw')}")
     except Exception as e:
         logger.info("error in db connection {}".format(e))
 
