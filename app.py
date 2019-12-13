@@ -121,7 +121,22 @@ def billapp(username):
             return redirect('/')
     else:
         return redirect('/')
-
+@app.route('/resetpassword', methods=['POST'])
+def resetpw():
+    if(request.method=='POST'):
+        try:
+            userid=session['username']
+        except:
+            logger.error("Error on password reset: MISSING LOG-IN")
+        newpassword=request.form['newpassword']
+        reset=BTBackend().resetpw(newpassword,userid)
+        if(reset=='SUCCESS'):
+            return redirect('/settings')
+        elif(reset=='FAILURE'):
+            return redirect('/bills')
+    else:
+        return "FORBIDDEN"
+    
 @app.route('/login', methods=['GET','POST'])
 def userlogin():
     

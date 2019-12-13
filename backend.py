@@ -7,9 +7,8 @@ import logging
 from logging import Logger
 from handlers import LogHandler
 import os
-logger=Logger("BillTrak-Backend")
-logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S',
-    level=logger.info)
+logger=Logger("BillTrakBackend")
+logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 
 hdlr=LogHandler()
 logger.addHandler(hdlr)
@@ -100,7 +99,19 @@ class BTBackend():
 
     def validateuser(self, userid):
         pass
-
+    def resetpw(self,newpassword,userid,oldpassword=None):
+        query="""
+        update users 
+        set password = crypt(:newpassword, password)
+        WHERE userid = :userid
+        """
+        try:
+            self.db.query(query,newpassword=newpassword,userid=userid)
+            return "SUCCESS"
+        except:
+            logger.error("Error running password reset query")
+            return "FAILURE"
+        
     def validatepw(self, password,userid):
         query="""
         SELECT *

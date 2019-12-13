@@ -11,14 +11,16 @@
         <div class="container">
           <div class="notification">
             <h1>Account Settings</h1>
+            <form method="POST" action="/resetpassword">
             <div class="field is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" placeholder="Enter new password">
+                <input class="input" name="newpassword" type="text" placeholder="Enter new password">
               </p>
               <p class="control">
                 <button type="submit" class="button is-danger">Reset</button>
               </p>
             </div>
+          </form>
           </div>
         </div>
     {% endblock %}
