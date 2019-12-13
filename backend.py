@@ -2,7 +2,7 @@
 import random
 import string
 import records
-from secrets import secrets as secrets
+# from secrets import secrets as secrets
 import logging
 from logging import Logger
 from handlers import LogHandler
