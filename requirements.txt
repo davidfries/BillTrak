@@ -7,7 +7,7 @@ psycopg2==2.7.6.1
 records==0.5.2
 # pandas==0.23.4
 # matplotlib==3.0.2
-redis==3.3.11
+redis==4.4.4
 Flask-Session==0.3.1
 APScheduler==3.6.1
 sendgrid==6.1.0
