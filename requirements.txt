@@ -1,6 +1,6 @@
 flask_mail
 # bokeh==1.0.1
-requests==2.20.0
+requests==2.31.0
 Flask==1.0.2
 psycopg2==2.7.6.1
 # flask-talisman==0.7.0
