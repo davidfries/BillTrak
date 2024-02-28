@@ -1,13 +1,13 @@
 flask_mail
 # bokeh==1.0.1
-requests==2.20.0
-Flask==1.0.2
-psycopg2==2.7.6.1
+requests==2.31.0
+Flask==3.0.2
+psycopg2==2.9.9
 # flask-talisman==0.7.0
-records==0.5.2
+records==0.5.3
 # pandas==0.23.4
 # matplotlib==3.0.2
-redis==3.3.11
-Flask-Session==0.3.1
-APScheduler==3.6.1
-sendgrid==6.1.0
+redis==5.0.1
+Flask-Session==0.6.0
+APScheduler==3.10.4
+sendgrid==6.11.0

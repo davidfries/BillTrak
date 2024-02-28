@@ -7,7 +7,7 @@ from apscheduler.executors.pool import ProcessPoolExecutor
 import os
 class EmailScheduler():
     jobstores = {
-        'default':SQLAlchemyJobStore(f'postgresql://192.168.5.172/billtrak?user=dj&password={os.getenv("dbpw")}')
+        'default':SQLAlchemyJobStore(f'postgresql://{os.getenv("dburl")}/billtrak?user=dj&password={os.getenv("dbpw")}')
     }
     executors = {
     'default': {'type': 'threadpool', 'max_workers': 20},

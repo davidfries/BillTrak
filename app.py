@@ -23,11 +23,11 @@ app.config['MAIL_USERNAME']='apikey'
 app.config['PASSWORD']='{}'.format(os.getenv('emailapikey'))
 app.config['MAIL_DEFAULT_SENDER']='notification@billtrak.io'
 app.config['SESSION_TYPE']='redis'
-app.config['SESSION_REDIS']=Redis('192.168.5.75')
+app.config['SESSION_REDIS']=Redis(os.getenv('redisurl'))
 app.config['SECRET_KEY'] = os.getenv('sessionkey')
 logger=Logger("BillTrakCore")
 logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S',
-    level=logger.info)
+    level=logging.INFO)
 
 hdlr=LogHandler()
 logger.addHandler(hdlr)
@@ -129,7 +129,7 @@ def resetpw():
         except:
             logger.error("Error on password reset: MISSING LOG-IN")
         newpassword=request.form['newpassword']
-        reset=BTBackend().resetpw(newpassword,userid)
+        reset=BTBackend().resetpw(userid,newpassword)
         if(reset=='SUCCESS'):
             return redirect('/settings')
         elif(reset=='FAILURE'):

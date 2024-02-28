@@ -1,195 +1,164 @@
-
 import random
 import string
-import records
-# from secrets import secrets as secrets
-import logging
-from logging import Logger
-from handlers import LogHandler
+from sqlalchemy import create_engine, Column, Integer, String, Boolean, Date
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+from envs import envs
+import datetime
+from datetime import timedelta
 import os
-logger=Logger("BillTrakBackend")
-logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 
-hdlr=LogHandler()
-logger.addHandler(hdlr)
+Base = declarative_base()
+
+class User(Base):
+    __tablename__ = 'users'
+    userid = Column(String, primary_key=True)
+    password = Column(String)
+    email = Column(String)
+
+class Company(Base):
+    __tablename__ = 'company'
+    companyid = Column(Integer, primary_key=True)
+    companyname = Column(String)
+    datecreated = Column(Date)
+    userid = Column(String)
+    category = Column(String)
+
+class Bill(Base):
+    __tablename__ = 'bills'
+    billid = Column(Integer, primary_key=True)
+    companyid = Column(Integer)
+    amt = Column(Integer)
+    datepaid = Column(Date)
+    confirmationnum = Column(String)
+    paymenturl = Column(String)
+    category = Column(String)
+    phonenum = Column(String)
+    recurring = Column(Boolean)
+    duedate = Column(Date)
+
+class Notification(Base):
+    __tablename__ = 'notificationall'
+    id = Column(Integer, primary_key=True)
+    duedate = Column(Date)
+
 class BTBackend():
-    
-    try:
-        db = records.Database(
-            f"postgresql://192.168.5.172/billtrak?user=dj&password={os.getenv('dbpw')}")
-    except Exception as e:
-        logger.info("error in db connection {}".format(e))
+    def __init__(self):
+        engine = create_engine(f"postgresql://{envs['dburl']}/billtrak?user=dj&password={envs['dbpw']}")
+
+        Session = sessionmaker(bind=engine)
+        self.session = Session()
 
     def genintid(self):
         return random.getrandbits(30)
-        
 
     def gencharid(self):
-        userid = ''.join(random.choices(
-            string.ascii_letters + string.digits, k=8))
+        userid = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
         return userid
 
-    # def debugprint(self):
-    #     rows=self.db.query("select * from bills")
-    #     print(rows.all().paymenturl)
-    #     pass
-    def createuser(self,userid,password,email):
-        query='''
-        INSERT INTO users (userid, password,email) VALUES (
-        :userid,
-     crypt(:password, gen_salt('bf')),:email
-            );
-        '''
-        try:
-            
-            self.db.query(query,userid=userid,password=password,email=email)
-        except Exception as e:
-            print("create user error {}".format(e))
-    def createcompany(self, companyname, datecreated, userid,  category=None):
-        companyid=self.genintid()
-        query = "INSERT INTO company(companyid,companyname,datecreated,userid,category) VALUES(:companyid,:companyname,:datecreated,:userid,:category)"
-        self.db.query(query, companyid=companyid, companyname=companyname,
-                      datecreated=datecreated, category=category, userid=userid)
-    def getbilldata(self,userid):
-        # REMOVED FROM QUERY FOR TESTING
-        # AND date_trunc('month', duedate) = date_trunc('month', current_date) 
-        query="select * from billdatabyuserid WHERE userid=:userid order by duedate desc"
-        rows = self.db.query(query,userid=userid)
-        return rows.all()
-    def getbillsbycompany(self, companyid,companyname):
-        query = "select * from bills where companyid=:companyid"
+    def createuser(self, userid, password, email):
+        user = User(userid=userid, password=password, email=email)
+        self.session.add(user)
+        self.session.commit()
 
-        rows = self.db.query(query, companyid=self.getcompanyidbyname(companyname))
-        return rows.all()
+    def createcompany(self, companyname, datecreated, userid, category=None):
+        companyid = self.genintid()
+        company = Company(companyid=companyid, companyname=companyname, datecreated=datecreated, userid=userid, category=category)
+        self.session.add(company)
+        self.session.commit()
 
-    def getbillinfo(self, billid,userid):
-        query = "select * from billdatabyuserid WHERE billid=:billid and userid=:userid"
-
-        rows = self.db.query(query, billid=billid,userid=userid).first()
+    def getbilldata(self, userid):
+        rows = self.session.query(Bill).filter(Bill.userid == userid).order_by(Bill.duedate.desc()).all()
         return rows
 
-    def getcompanyidsbyuserid(self, userid):
-        query = "select companyid from company where userid = :userid"
-        return self.db.query(query, userid=userid).all()
+    def getbillsbycompany(self, companyid, companyname):
+        rows = self.session.query(Bill).filter(Bill.companyid == self.getcompanyidbyname(companyname)).all()
+        return rows
 
-    def getcompanycount(self,userid):
-        query = "select companyname from company where userid = :userid"
-        rows =self.db.query(query, userid=userid).all()
+    def getbillinfo(self, billid, userid):
+        row = self.session.query(Bill).filter(Bill.billid == billid, Bill.userid == userid).first()
+        return row
+
+    def getcompanyidsbyuserid(self, userid):
+        rows = self.session.query(Company.companyid).filter(Company.userid == userid).all()
+        return rows
+
+    def getcompanycount(self, userid):
+        rows = self.session.query(Company.companyname).filter(Company.userid == userid).all()
         return len(rows)
 
-    def getcompanynames(self,userid):
-        query = "select companyname from company where userid = :userid"
-        rows =self.db.query(query, userid=userid).all()#exports rows to JSON for request from JS
-        data=[]
-        
-        for row in rows:
-            
-            dat={"name":row.companyname
-            }
-            data.append(dat)
+    def getcompanynames(self, userid):
+        rows = self.session.query(Company.companyname).filter(Company.userid == userid).all()
+        data = [{"name": row.companyname} for row in rows]
         return data
 
     def getbillrecurringstatus(self, billid):
-        query = "select recurring from bills where billid=:billid"
+        row = self.session.query(Bill.recurring).filter(Bill.billid == billid).first()
+        return row
 
-        return self.db.query(query, billid=billid).first()
-    def getemailbyuserid(self,userid):
-        query="SELECT email from users where userid=:userid"
-        return self.db.query(query, userid=userid).all()
-
-    def validateuser(self, userid):
-        pass
-    def resetpw(self,newpassword,userid,oldpassword=None):
-        query="""
-        update users 
-        set password = crypt(:newpassword, password)
-        WHERE userid = :userid
-        """
-        try:
-            self.db.query(query,newpassword=newpassword,userid=userid)
-            return "SUCCESS"
-        except:
-            logger.error("Error running password reset query")
-            return "FAILURE"
-        
-    def validatepw(self, password,userid):
-        query="""
-        SELECT *
-        FROM users
-        WHERE userid = :userid
-        AND password = crypt(:password, password);
-        """
-        rows=self.db.query(query,password=password,userid=userid).all()
-        print(len(rows)>0)
-        return len(rows)>0
-    def addmonthlyincome(self,userid,amt):
-        query="""update users set monthlyincome=:amt where userid=:userid"""
-        try:
-            self.db.query(query,amt=amt,userid=userid)
-        except Exception as e:
-            print("error in add monthly income amount "+str(e))
-    def getcompanyamts(self,userid):
-        query="""
-        select * from companyamts where userid =:userid
-        """
-        try:
-            rows=self.db.query(query,userid=userid).all()
-            return rows
-        except Exception as e:
-            print(e)
-    def editbills(self,billid,amt,duedate,phonenum,paymenturl,confirmationnum):
-        query="""UPDATE bills SET amt=:amt, duedate=:duedate,paymenturl=:paymenturl,phonenum=:phonenum, confirmationnum=:confirmationnum where billid=:billid """
-        try:
-            self.db.query(query,amt=amt,billid=billid,duedate=duedate,paymenturl=paymenturl,phonenum=phonenum,confirmationnum=confirmationnum)
-        except Exception as e:
-            logger.info(e)
-
-    def updatebillamt(self,billid,amt):
-        query="UPDATE bills SET amt=:amt,where billid=:billid "
-        try:
-            self.db.query(query,amt=amt,billid=billid)
-        except:
-            print("error in bill amt update")
-
-    def updatebillrecurring(self, billid,recurring):
-        query="update bills set recurring=:recurring where billid=:billid"
-        
-        self.db.query(query,billid=billid,recurring=not recurring)
-
-
-    def deletebill(self, billid):
-        query = "DELETE FROM bills WHERE billid=:billid"
-        self.db.query(query, billid=billid)
-
-    def getcompanyidbyname(self,companyname):
-        query= "SELECT companyid from company where companyname=:companyname"
-        rows =self.db.query(query,companyname=companyname).first()
-        
-        return rows.companyid
-               
-    def createbill(self,  billid, amt,  duedate, recurring,userid,companyname,confirmationnum,companyid=None,datepaid=None, paymenturl=None, phonenum=None, category=None):
-        query = "INSERT INTO bills(billid,companyid,amt,datepaid,confirmationnum,paymenturl,category,phonenum,recurring,duedate) VALUES(:billid,:companyid,:amt,:datepaid,:confirmationnum,:paymenturl,:category,:phonenum,:recurring,:duedate)"
-        
-        companyid=self.getcompanyidbyname(companyname)
-        self.db.query(query,  billid=billid, companyid=companyid, amt=amt, datepaid=datepaid, 
-                      confirmationnum=confirmationnum, paymenturl=paymenturl,category=category, phonenum=phonenum,  recurring=recurring,duedate=duedate)
-
-        
-    def getnotifications(self):
-        query=""" 
-        select * from notificationall WHERE duedate > now() - interval '3 day'
-        
-        """
-        rows=self.db.query(query).all()
-
+    def getemailbyuserid(self, userid):
+        rows = self.session.query(User.email).filter(User.userid == userid).all()
         return rows
 
-    
+    def validatepw(self, password, userid):
+        rows = self.session.query(User).filter(User.userid == userid, User.password == password).all()
+        return len(rows) > 0
 
-    def paybill(self,billid):
-        query="""
-        update bills set paid = not coalesce(paid, 'f') where billid=:billid
-        
-        
-        """
-        return self.db.query(query,billid=str(billid))
+    def addmonthlyincome(self, userid, amt):
+        user = self.session.query(User).filter(User.userid == userid).first()
+        user.monthlyincome = amt
+        self.session.commit()
+
+    def getcompanyamts(self, userid):
+        rows = self.session.query(Company).filter(Company.userid == userid).all()
+        return rows
+
+    def editbills(self, billid, amt, duedate, phonenum, paymenturl, confirmationnum):
+        bill = self.session.query(Bill).filter(Bill.billid == billid).first()
+        bill.amt = amt
+        bill.duedate = duedate
+        bill.phonenum = phonenum
+        bill.paymenturl = paymenturl
+        bill.confirmationnum = confirmationnum
+        self.session.commit()
+
+    def updatebillamt(self, billid, amt):
+        bill = self.session.query(Bill).filter(Bill.billid == billid).first()
+        bill.amt = amt
+        self.session.commit()
+
+    def updatebillrecurring(self, billid, recurring):
+        bill = self.session.query(Bill).filter(Bill.billid == billid).first()
+        bill.recurring = not recurring
+        self.session.commit()
+
+    def deletebill(self, billid):
+        self.session.query(Bill).filter(Bill.billid == billid).delete()
+        self.session.commit()
+
+    def getcompanyidbyname(self, companyname):
+        row = self.session.query(Company.companyid).filter(Company.companyname == companyname).first()
+        return row.companyid
+
+    def createbill(self, billid, amt, duedate, recurring, userid, companyname, confirmationnum, companyid=None, datepaid=None, paymenturl=None, phonenum=None, category=None):
+        companyid = self.getcompanyidbyname(companyname)
+        bill = Bill(billid=billid, companyid=companyid, amt=amt, datepaid=datepaid, confirmationnum=confirmationnum, paymenturl=paymenturl, category=category, phonenum=phonenum, recurring=recurring, duedate=duedate)
+        self.session.add(bill)
+        self.session.commit()
+
+    def getnotifications(self):
+        rows = self.session.query(Notification).filter(Notification.duedate > datetime.datetime.now() - timedelta(days=3)).all()
+        return rows
+
+    def paybill(self, billid):
+        bill = self.session.query(Bill).filter(Bill.billid == billid).first()
+        bill.paid = not bill.paid
+        self.session.commit()
+    def resetpw(self, userid, password):
+        user = self.session.query(User).filter(User.userid == userid).first()
+        user.password = password
+        try:
+            self.session.commit()
+            return 'SUCCESS'
+        except:
+            return 'FAILURE'
